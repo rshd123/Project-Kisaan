@@ -339,19 +339,19 @@ const VoiceChat = () => {
         )}
 
         {/* Header */}
-        <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+        <div className="bg-white rounded-xl shadow-lg p-6 mb-6 text-center">
           <h1 className="text-3xl font-bold text-green-800 mb-2">
-            🎤 FarmMitra - आवाज़ से बात करें
+            FarmMitra
           </h1>
           <p className="text-gray-600 mb-4">
-            अपनी आवाज़ में सवाल पूछें, हमारा AI किसान मित्र आपकी मदद करेगा
+            Choose your 
           </p>
           
           {/* Language Selection */}
           <div className="flex flex-wrap gap-4 mb-4">
             <div className="flex-1 min-w-48">
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Select Language
+                Select your regional Language
               </label>
               <select
                 value={selectedLanguage}

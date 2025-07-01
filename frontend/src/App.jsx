@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PriceScraper from './components/Pricescraper.jsx';
 import Diagnose from './components/Diagnoseform.jsx';
 import VoiceChat from './components/VoiceChat.jsx';
+import Chatbot from './components/chatbot/Chatbot.jsx';
 
 function App() {
   const [activeTab, setActiveTab] = useState('voice');
@@ -9,7 +10,8 @@ function App() {
   const tabs = [
     { id: 'voice', label: '🎤 Voice Chat', component: VoiceChat },
     { id: 'diagnose', label: '🌱 Crop Diagnosis', component: Diagnose },
-    { id: 'prices', label: '💰 Market Prices', component: PriceScraper }
+    { id: 'prices', label: '💰 Market Prices', component: PriceScraper },
+    {id: 'chatbot', label: '🤖 Chatbot', component: Chatbot} 
   ];
 
   const ActiveComponent = tabs.find(tab => tab.id === activeTab)?.component || VoiceChat;
@@ -20,7 +22,7 @@ function App() {
       <div className="bg-white shadow-lg">
         <div className="max-w-6xl mx-auto px-4 py-4">
           <h1 className="text-4xl font-bold text-green-800 text-center mb-4">
-            🌾 Project Kisan - किसान मित्र
+            Project Kisan 
           </h1>
           <p className="text-center text-gray-600 mb-6">
             आपका डिजिटल कृषि सहायक / Your Digital Agriculture Assistant

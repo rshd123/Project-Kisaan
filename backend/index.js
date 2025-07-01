@@ -3,7 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import diagnosisRoutes from './routes/diagnosis.js';
 import pricesRoutes from './routes/prices.js';
-import testRoutes from './routes/test.js';
+
 import voiceRoutes from './routes/voice.js';
 
 dotenv.config();
@@ -26,7 +26,6 @@ app.get('/', (req, res) => {
 
 app.use('/api/diagnose', diagnosisRoutes);
 app.use('/api/prices', pricesRoutes);
-app.use('/api/test', testRoutes);
 app.use('/api/voice', voiceRoutes);
 
 const PORT = process.env.PORT || 5000;
