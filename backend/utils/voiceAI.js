@@ -43,6 +43,7 @@ const SUPPORTED_LANGUAGES = {
  */
 async function speechToText(audioBuffer, languageCode = 'hi-IN', encoding = 'WEBM_OPUS', sampleRateHertz = 48000) {
   try {
+    // Enhanced request configuration for better recognition
     const request = {
       audio: {
         content: audioBuffer.toString('base64'),
@@ -56,20 +57,56 @@ async function speechToText(audioBuffer, languageCode = 'hi-IN', encoding = 'WEB
         enableWordTimeOffsets: false,
         model: 'latest_long', // Use latest model for better accuracy
         useEnhanced: true, // Enhanced model for better accuracy
+        maxAlternatives: 1,
+        speechContexts: [
+          {
+            phrases: [
+              "farming", "crop", "disease", "pest", "fertilizer", "irrigation", "harvest", "seed", "soil", "weather",
+              "wheat", "rice", "cotton", "tomato", "potato", "onion", "maize", "sugarcane", "millet",
+              "yellowing", "wilting", "spots", "insects", "fungus", "drought", "water", "market", "price"
+            ],
+            boost: 20.0
+          }
+        ]
       },
     };
 
     console.log(`🎤 Processing speech in ${SUPPORTED_LANGUAGES[languageCode] || languageCode}...`);
+    console.log(`📊 Audio buffer size: ${audioBuffer.length} bytes`);
     
     const [response] = await speechClient.recognize(request);
+    
+    if (!response.results || response.results.length === 0) {
+      console.log('⚠️ No speech detected in audio');
+      throw new Error('No speech detected in the audio. Please speak clearly and try again.');
+    }
+    
     const transcription = response.results
       .map(result => result.alternatives[0].transcript)
-      .join('\n');
+      .join('\n')
+      .trim();
 
-    console.log(`📝 Transcribed text: ${transcription}`);
+    if (!transcription || transcription.length === 0) {
+      console.log('⚠️ Empty transcription received');
+      throw new Error('Could not understand the speech. Please speak clearly and try again.');
+    }
+
+    console.log(`📝 Transcribed text: "${transcription}"`);
+    console.log(`🎯 Confidence: ${response.results[0]?.alternatives[0]?.confidence || 'N/A'}`);
+    
     return transcription;
   } catch (error) {
     console.error('Speech-to-Text error:', error);
+    
+    // Enhanced error handling
+    if (error.code === 3) { // INVALID_ARGUMENT
+      throw new Error('Audio format not supported. Please check your microphone settings.');
+    } else if (error.code === 7) { // PERMISSION_DENIED
+      throw new Error('Speech recognition service not available. Using demo mode.');
+    } else if (error.code === 14) { // UNAVAILABLE
+      throw new Error('Speech recognition service temporarily unavailable.');
+    }
+    
     throw new Error(`Speech recognition failed: ${error.message}`);
   }
 }
@@ -140,7 +177,7 @@ async function processVoiceQuery(audioBuffer, inputLanguage = 'hi-IN', context =
     // Step 3: Get AI response using Vertex AI
     console.log('🤖 Processing with Vertex AI...');
     const result = await generativeModel.generateContent(enhancedPrompt);
-    const aiResponse = result.response.text();
+    const aiResponse = result.response.candidates[0].content.parts[0].text;
     
     console.log(`💬 AI Response: ${aiResponse}`);
 
@@ -179,27 +216,47 @@ async function processVoiceQuery(audioBuffer, inputLanguage = 'hi-IN', context =
 function createAgriculturalPrompt(userQuery, context, languageCode) {
   const language = SUPPORTED_LANGUAGES[languageCode] || 'English';
   
-  return `You are an expert agricultural advisor helping Indian farmers. Respond in ${language} language.
+  return `You are "FarmMitra" (फार्म मित्र), an expert agricultural advisor with 20+ years of experience helping Indian farmers. You understand:
 
-Context Information:
-- Farmer's Location: ${context.location || 'India'}
-- Current Season: ${context.season || 'Current season'}
-- Crop Interest: ${context.crop || 'General farming'}
-- Farmer's Experience: ${context.experience || 'Varied'}
+🌾 CROPS: Wheat, Rice, Cotton, Sugarcane, Corn, Vegetables, Fruits, Pulses, Oilseeds
+🐛 PESTS: Bollworm, Aphids, Whitefly, Stem borer, Leaf curl virus, Bacterial blight
+💊 TREATMENTS: Neem oil, Copper fungicide, Imidacloprid, Carbendazim, Bio-pesticides
+🌱 SEASONS: Kharif (June-Oct), Rabi (Nov-April), Zaid (April-June)
+🌧️ WEATHER: Monsoon patterns, drought management, flood protection
+💰 SCHEMES: PM-KISAN, Crop insurance, Soil health cards, DBT
 
-Farmer's Question: "${userQuery}"
+FARMER CONTEXT:
+Location: ${context.location || 'India'} | Season: ${context.season || 'Current'} | Crop: ${context.crop || 'Mixed farming'} | Experience: ${context.experience || 'Moderate'}
 
-Instructions:
-1. Provide practical, actionable advice suitable for Indian farming conditions
-2. Use simple, clear language that a farmer can easily understand
-3. Include specific steps or recommendations when possible
-4. If discussing crops, consider Indian climate and soil conditions
-5. For market prices, mention checking local mandis or government sources
-6. Keep response concise but helpful (under 150 words)
-7. Be encouraging and supportive in tone
-8. If you need more information, ask specific follow-up questions
+FARMER'S QUESTION: "${userQuery}"
 
-Please respond in ${language}:`;
+ANALYSIS: First, identify if this is about:
+- Pest/Disease (symptoms, treatment, prevention)
+- Crop Management (planting, irrigation, harvesting)
+- Market/Prices (selling, buying, storage)
+- Weather/Climate (rain, drought, temperature)
+- Government Schemes (subsidies, loans, insurance)
+- General Farming (seeds, fertilizers, equipment)
+
+RESPONSE GUIDELINES:
+✅ Use ONLY ${language} language - simple, farmer-friendly words
+✅ Give specific, actionable steps with quantities/timing
+✅ Mention cost-effective solutions available locally
+✅ Include preventive measures for future
+✅ Reference local agricultural practices
+✅ Keep response practical and encouraging (100-150 words)
+
+EXAMPLE RESPONSE STRUCTURE:
+"मैं समझ गया आपकी समस्या। [Problem acknowledgment]
+यह [specific issue] की समस्या है। [Diagnosis]
+तुरंत करें: [Immediate action 1], [Immediate action 2]
+उपचार: [Treatment with dosage] 
+रोकथाम: [Prevention method]
+लागत: लगभग [cost estimate]
+कब तक परिणाम: [timeline]
+क्या आपने [follow-up question]?"
+
+Now respond as FarmMitra in ${language}:`;
 }
 
 /**

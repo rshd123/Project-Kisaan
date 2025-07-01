@@ -1,11 +1,15 @@
-// routes/voice.js - Voice interaction API routes
+// routes/voice.js - Voice interaction API routes with fallback support
 import express from 'express';
 import multer from 'multer';
 import { processVoiceQuery, SUPPORTED_LANGUAGES, getAvailableVoices } from '../utils/voiceAI.js';
+import { processMockVoiceQuery } from '../utils/mockVoiceAI.js';
 import path from 'path';
 import fs from 'fs';
 
 const router = express.Router();
+
+// Track if Google Cloud APIs are available
+let googleCloudAvailable = null;
 
 // Configure multer for audio file uploads
 const storage = multer.memoryStorage();
@@ -25,8 +29,38 @@ const upload = multer({
 });
 
 /**
+ * Check if Google Cloud APIs are available
+ */
+async function checkGoogleCloudAPIs() {
+  if (googleCloudAvailable !== null) {
+    return googleCloudAvailable;
+  }
+  
+  try {
+    // Try to import and test a simple TTS call
+    const { textToSpeech } = await import('../utils/voiceAI.js');
+    await textToSpeech('test', 'en-IN');
+    googleCloudAvailable = true;
+    console.log('✅ Google Cloud APIs are available');
+  } catch (error) {
+    googleCloudAvailable = false;
+    console.log('⚠️ Google Cloud APIs not available, using mock implementation');
+    console.log(`Error: ${error.message}`);
+    
+    // Check if it's specifically a permissions/API disabled error
+    if (error.message.includes('PERMISSION_DENIED') || 
+        error.message.includes('API has not been used') ||
+        error.message.includes('disabled')) {
+      console.log('🔧 Google Cloud APIs need to be enabled in the console');
+    }
+  }
+  
+  return googleCloudAvailable;
+}
+
+/**
  * POST /api/voice/query
- * Process voice query from farmer
+ * Process voice query from farmer with fallback support
  */
 router.post('/query', upload.single('audio'), async (req, res) => {
   try {
@@ -57,9 +91,44 @@ router.post('/query', upload.single('audio'), async (req, res) => {
 
     console.log(`🎤 Processing voice query in ${SUPPORTED_LANGUAGES[language]}...`);
     console.log(`📍 Context:`, context);
+    console.log(`📊 Audio buffer size: ${req.file.buffer.length} bytes`);
 
-    // Process the voice query
-    const result = await processVoiceQuery(req.file.buffer, language, context);
+    // Check if Google Cloud APIs are available
+    const isGoogleCloudAvailable = await checkGoogleCloudAPIs();
+    console.log(`🌐 Google Cloud available: ${isGoogleCloudAvailable}`);
+    
+    let result;
+    if (isGoogleCloudAvailable) {
+      try {
+        console.log('📡 Attempting Google Cloud processing...');
+        // Use real Google Cloud services
+        result = await processVoiceQuery(req.file.buffer, language, context);
+        console.log(`🎯 Google Cloud result - Query: "${result.userQuery}", Error: ${result.error || 'None'}`);
+        
+        // Check if the result contains an error (speech recognition failed)
+        if (result.error) {
+          console.log('⚠️ Google Cloud speech recognition failed, falling back to mock mode');
+          console.log(`Error in result: ${result.text}`);
+          // Fall back to mock implementation
+          result = await processMockVoiceQuery(req.file.buffer, language, context);
+          result.isMock = true;
+          console.log(`🎭 Mock result - Query: "${result.userQuery}"`);
+        }
+      } catch (error) {
+        console.log('⚠️ Google Cloud processing failed, falling back to mock mode');
+        console.log(`Error: ${error.message}`);
+        // Fall back to mock implementation
+        result = await processMockVoiceQuery(req.file.buffer, language, context);
+        result.isMock = true;
+        console.log(`🎭 Mock result - Query: "${result.userQuery}"`);
+      }
+    } else {
+      console.log('🎭 Using mock implementation (Google Cloud not available)');
+      // Use mock implementation for testing
+      result = await processMockVoiceQuery(req.file.buffer, language, context);
+      result.isMock = true;
+      console.log(`🎭 Mock result - Query: "${result.userQuery}"`);
+    }
 
     // Return response with audio as base64
     const response = {
@@ -69,13 +138,18 @@ router.post('/query', upload.single('audio'), async (req, res) => {
         response: result.text,
         language: result.language,
         timestamp: result.timestamp,
-        audio: result.audio.toString('base64'), // Convert audio buffer to base64
-        context: context
+        audio: result.audio.toString('base64'),
+        context: context,
+        isMock: result.isMock || false
       }
     };
 
     if (result.error) {
-      response.warning = 'Voice processing had issues, but error message was generated';
+      response.warning = 'Voice processing had issues, but response was generated';
+    }
+
+    if (result.isMock || !isGoogleCloudAvailable) {
+      response.info = 'Using demo mode. Enable Google Cloud APIs for full functionality.';
     }
 
     res.json(response);
@@ -84,7 +158,37 @@ router.post('/query', upload.single('audio'), async (req, res) => {
     console.error('Voice query error:', error);
     res.status(500).json({
       success: false,
-      error: error.message || 'Failed to process voice query'
+      error: error.message || 'Failed to process voice query',
+      suggestion: 'Please enable Google Cloud Speech APIs or try the demo mode'
+    });
+  }
+});
+
+/**
+ * GET /api/voice/status
+ * Check voice AI system status
+ */
+router.get('/status', async (req, res) => {
+  try {
+    const isGoogleCloudAvailable = await checkGoogleCloudAPIs();
+    
+    res.json({
+      success: true,
+      data: {
+        googleCloudAvailable: isGoogleCloudAvailable,
+        mode: isGoogleCloudAvailable ? 'production' : 'demo',
+        supportedLanguages: Object.keys(SUPPORTED_LANGUAGES).length,
+        message: isGoogleCloudAvailable 
+          ? 'Voice AI is fully operational' 
+          : 'Voice AI is running in demo mode. Enable Google Cloud APIs for full functionality.',
+        timestamp: new Date().toISOString()
+      }
+    });
+  } catch (error) {
+    console.error('Status check error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to check system status'
     });
   }
 });
@@ -276,6 +380,19 @@ router.get('/test', async (req, res) => {
       error: error.message || 'Voice AI test failed'
     });
   }
+});
+
+/**
+ * POST /api/voice/reset-cache
+ * Reset Google Cloud availability cache (for testing)
+ */
+router.post('/reset-cache', (req, res) => {
+  googleCloudAvailable = null;
+  console.log('🔄 Google Cloud availability cache reset');
+  res.json({
+    success: true,
+    message: 'Cache reset successfully'
+  });
 });
 
 export default router;

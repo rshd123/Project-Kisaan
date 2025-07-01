@@ -45,7 +45,7 @@ const PriceScraper = () => {
     <div className="p-4 max-w-3xl mx-auto">
       <h2 className="text-2xl font-bold mb-4">Market Price Data</h2>
       <div className="flex flex-col justify-center md:flex-row gap-4 mb-4">
-        <select className="p-2 border rounded text-white" onChange={(e) => setMarket(e.target.value)} defaultValue="">
+        <select className="p-2 border rounded text-black" onChange={(e) => setMarket(e.target.value)} defaultValue="">
           <option value="">-- Select Market --</option>
           {markets.map((mkt) => (
             <option key={mkt} value={mkt} className='text-black'>{mkt}</option>
