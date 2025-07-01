@@ -11,9 +11,10 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "@google-cloud/firestore": "^7.11.2",
+    "@google-cloud/speech": "^7.1.0",
+    "@google-cloud/text-to-speech": "^6.1.0",
     "@google-cloud/vertexai": "^1.10.0",
     "body-parser": "^2.2.0",
     "chromedriver": "^137.0.4",
@@ -23,5 +24,6 @@
     "google-auth-library": "^10.1.0",
     "multer": "^2.0.1",
     "selenium-webdriver": "^4.34.0"
-  }
+  },
+  "description": ""
 }
