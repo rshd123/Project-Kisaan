@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { LocationService } from '../utils/locationService.js';
+import WeatherWidget from './WeatherWidget.jsx';
 
 const LocationBanner = () => {
   const [locationState, setLocationState] = useState({
@@ -7,7 +8,8 @@ const LocationBanner = () => {
     location: null,
     error: null,
     isCorrect: null,
-    dismissed: false
+    dismissed: false,
+    showWeather: false
   });
 
   useEffect(() => {
@@ -35,7 +37,7 @@ const LocationBanner = () => {
   };
 
   const handleLocationFeedback = (isCorrect) => {
-    setLocationState(prev => ({ ...prev, isCorrect }));
+    setLocationState(prev => ({ ...prev, isCorrect, showWeather: isCorrect }));
     
     // Store user feedback for potential future improvements
     if (locationState.location) {
@@ -45,6 +47,15 @@ const LocationBanner = () => {
         timestamp: new Date().toISOString()
       }));
     }
+  };
+
+  const handleLocationUpdate = (newLocation) => {
+    setLocationState(prev => ({
+      ...prev,
+      location: newLocation,
+      isCorrect: true,
+      showWeather: true
+    }));
   };
 
   const dismissBanner = () => {
@@ -131,7 +142,7 @@ const LocationBanner = () => {
               
               {locationState.isCorrect === false && (
                 <div className="mt-1 text-xs text-orange-600">
-                  ⚠️ Thanks for the feedback. You can manually select your location in the settings.
+                  ⚠️ Thanks for the feedback. The weather widget below will help you enter the correct location.
                 </div>
               )}
             </div>
@@ -158,6 +169,16 @@ const LocationBanner = () => {
           </div>
         </div>
       </div>
+      
+      {/* Weather Widget */}
+      {(locationState.showWeather || locationState.isCorrect === false) && locationState.location && (
+        <div className="max-w-6xl mx-auto px-4 pb-4">
+          <WeatherWidget 
+            location={locationState.location} 
+            onLocationCorrect={handleLocationUpdate}
+          />
+        </div>
+      )}
     </div>
   );
 };
