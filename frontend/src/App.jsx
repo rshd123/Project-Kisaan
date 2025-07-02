@@ -3,6 +3,7 @@ import PriceScraper from './components/Pricescraper.jsx';
 import Diagnose from './components/Diagnoseform.jsx';
 import VoiceChat from './components/VoiceChat.jsx';
 import Chatbot from './components/chatbot/Chatbot.jsx';
+import LocationBanner from './components/LocationBanner.jsx';
 
 function App() {
   const [activeTab, setActiveTab] = useState('voice');
@@ -18,6 +19,9 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
+      {/* Location Banner */}
+      <LocationBanner />
+      
       {/* Header */}
       <div className="bg-white shadow-lg">
         <div className="max-w-6xl mx-auto px-4 py-4">
