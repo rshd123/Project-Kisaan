@@ -5,6 +5,7 @@ import diagnosisRoutes from './routes/diagnosis.js';
 import pricesRoutes from './routes/prices.js';
 import voiceRoutes from './routes/voice.js';
 import dataRoutes from './routes/data.js';
+import authRoutes from './routes/auth.js';
 
 dotenv.config();
 
@@ -28,6 +29,7 @@ app.use('/api/diagnose', diagnosisRoutes);
 app.use('/api/prices', pricesRoutes);
 app.use('/api/voice', voiceRoutes);
 app.use('/api/data', dataRoutes);
+app.use('/api/auth', authRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

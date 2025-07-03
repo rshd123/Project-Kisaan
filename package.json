@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "uuid": "^11.1.0"
+  }
+}

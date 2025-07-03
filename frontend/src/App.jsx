@@ -4,17 +4,46 @@ import Diagnose from './components/Diagnoseform.jsx';
 import VoiceChat from './components/VoiceChat.jsx';
 import Chatbot from './components/chatbot/Chatbot.jsx';
 import LocationBanner from './components/LocationBanner.jsx';
-import FirebaseDataViewer from './components/FirebaseDataViewer.jsx';
+import Dashboard from './components/Dashboard/Dashboard.jsx';
+import { useAppContext } from './context/AppContext.jsx';
 
 function App() {
+  const { isAuthenticated, user, logout, isLoading } = useAppContext();
   const [activeTab, setActiveTab] = useState('voice');
+
+  // Show loading screen while checking authentication
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
+        {/* Show LocationBanner even during loading to start location detection */}
+        <LocationBanner />
+        <div className="flex items-center justify-center" style={{ minHeight: 'calc(100vh - 120px)' }}>
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500 mx-auto mb-4"></div>
+            <h2 className="text-xl font-semibold text-green-800 mb-2">Project Kisan</h2>
+            <p className="text-gray-600">Loading your farming assistant...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // If user is not authenticated, show the dashboard (login/signup)
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
+        {/* Show LocationBanner for location detection during signup */}
+        <LocationBanner />
+        <Dashboard />
+      </div>
+    );
+  }
 
   const tabs = [
     { id: 'voice', label: '🎤 Voice Chat', component: VoiceChat },
     { id: 'diagnose', label: '🌱 Crop Diagnosis', component: Diagnose },
     { id: 'prices', label: '💰 Market Prices', component: PriceScraper },
-    {id: 'chatbot', label: '🤖 Chatbot', component: Chatbot},
-    {id: 'firebase', label: '🔥 Firebase Data', component: FirebaseDataViewer}
+    { id: 'chatbot', label: '🤖 Chatbot', component: Chatbot }
   ];
 
   const ActiveComponent = tabs.find(tab => tab.id === activeTab)?.component || VoiceChat;
@@ -27,6 +56,19 @@ function App() {
       {/* Header */}
       <div className="bg-white shadow-lg">
         <div className="max-w-6xl mx-auto px-4 py-4">
+          {/* User greeting and logout */}
+          <div className="flex justify-between items-center mb-4">
+            <div className="text-sm text-gray-600">
+              Welcome back, <span className="font-semibold text-green-700">{user?.name || 'Farmer'}</span>!
+            </div>
+            <button
+              onClick={logout}
+              className="px-4 py-2 text-sm text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg transition-colors"
+            >
+              Logout
+            </button>
+          </div>
+          
           <h1 className="text-4xl font-bold text-green-800 text-center mb-4">
             Project Kisan 
           </h1>

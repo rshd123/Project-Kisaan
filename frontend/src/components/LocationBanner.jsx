@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { LocationService } from '../utils/locationService.js';
 import { FirebaseDataService } from '../utils/firebaseDataService.js';
+import { useAppContext } from '../context/AppContext.jsx';
 import WeatherWidget from './WeatherWidget.jsx';
 
 const LocationBanner = () => {
+  const { updateLocation } = useAppContext();
   const [locationState, setLocationState] = useState({
     loading: true,
     location: null,
@@ -27,6 +29,9 @@ const LocationBanner = () => {
         location,
         error: null
       }));
+      
+      // Update global location context
+      updateLocation(location);
     } catch (error) {
       setLocationState(prev => ({
         ...prev,
@@ -69,6 +74,9 @@ const LocationBanner = () => {
       isCorrect: true,
       showWeather: true
     }));
+    
+    // Update global location context
+    updateLocation(newLocation);
   };
 
   const dismissBanner = () => {
