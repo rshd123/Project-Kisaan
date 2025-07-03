@@ -3,6 +3,7 @@ import PriceScraper from './components/Pricescraper.jsx';
 import Diagnose from './components/Diagnoseform.jsx';
 import VoiceChat from './components/VoiceChat.jsx';
 import Chatbot from './components/chatbot/Chatbot.jsx';
+import CommunityChat from './components/CommunityChat.jsx';
 import LocationBanner from './components/LocationBanner.jsx';
 import Dashboard from './components/Dashboard/Dashboard.jsx';
 import { useAppContext } from './context/AppContext.jsx';
@@ -40,10 +41,11 @@ function App() {
   }
 
   const tabs = [
-    { id: 'voice', label: 'Voice Chat', component: VoiceChat },
-    { id: 'diagnose', label: 'Crop Diagnosis', component: Diagnose },
-    { id: 'prices', label: ' Market Prices', component: PriceScraper },
-    { id: 'chatbot', label: 'Chatbot', component: Chatbot }
+    { id: 'voice', label: '🎤 Voice Chat', component: VoiceChat },
+    { id: 'diagnose', label: '🌱 Crop Diagnosis', component: Diagnose },
+    { id: 'prices', label: '💰 Market Prices', component: PriceScraper },
+    { id: 'community', label: '💬 Community Chat', component: CommunityChat },
+    { id: 'chatbot', label: '🤖 Chatbot', component: Chatbot }
   ];
 
   const ActiveComponent = tabs.find(tab => tab.id === activeTab)?.component || VoiceChat;
