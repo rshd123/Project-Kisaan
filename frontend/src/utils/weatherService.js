@@ -1,7 +1,7 @@
 // Weather detection and farming tips utility
 export const WeatherService = {
   // OpenWeatherMap API key
-  API_KEY: 'c74a208d3c3a5c888d6b7bdda4be7e68',
+  
 
   /**
    * Get current weather for given coordinates
@@ -12,7 +12,7 @@ export const WeatherService = {
   async getWeatherData(latitude, longitude) {
     try {
       const response = await fetch(
-        `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${this.API_KEY}&units=metric`
+        `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${import.meta.env.WEATHER_API_KEY}&units=metric`
       );
       
       if (!response.ok) {

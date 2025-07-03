@@ -57,12 +57,7 @@ export const LocationService = {
     });
   },
 
-  /**
-   * Convert coordinates to human-readable address
-   * @param {number} latitude 
-   * @param {number} longitude 
-   * @returns {Promise<string>}
-   */
+  
   async reverseGeocode(latitude, longitude) {
     try {
       // Using a free geocoding service

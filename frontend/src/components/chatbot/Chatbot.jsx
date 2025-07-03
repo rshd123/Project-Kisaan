@@ -69,7 +69,7 @@ function Chatbot() {
         started ?
         <div className="flex flex-col items-center justify-center h-full bg-gradient-to-br from-blue-50 to-indigo-100 p-8">
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">Welcome to MYGPT</h2>
+            <h2 className="text-2xl font-bold text-gray-800 mb-4"></h2>
             <p className="text-gray-600 mb-8">Start a conversation with our AI assistant</p>
             <button 
               className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 px-6 rounded-full transition-all duration-200 transform hover:scale-105 shadow-lg"
