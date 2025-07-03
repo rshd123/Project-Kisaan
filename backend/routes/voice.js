@@ -71,7 +71,7 @@ router.post('/query', upload.single('audio'), async (req, res) => {
       });
     }
 
-    const { language = 'hi-IN', location, season, crop, experience } = req.body;
+    const { language = 'hi-IN', location, season, crop, experience, userId } = req.body;
 
     // Validate language
     if (!SUPPORTED_LANGUAGES[language]) {
@@ -90,7 +90,8 @@ router.post('/query', upload.single('audio'), async (req, res) => {
     };
 
     console.log(`🎤 Processing voice query in ${SUPPORTED_LANGUAGES[language]}...`);
-    console.log(`📍 Context:`, context);
+    console.log(`� User ID: ${userId || 'anonymous'}`);
+    console.log(`�📍 Context:`, context);
     console.log(`📊 Audio buffer size: ${req.file.buffer.length} bytes`);
 
     // Check if Google Cloud APIs are available
@@ -102,7 +103,7 @@ router.post('/query', upload.single('audio'), async (req, res) => {
       try {
         console.log('📡 Attempting Google Cloud processing...');
         // Use real Google Cloud services
-        result = await processVoiceQuery(req.file.buffer, language, context);
+        result = await processVoiceQuery(req.file.buffer, language, context, userId);
         console.log(`🎯 Google Cloud result - Query: "${result.userQuery}", Error: ${result.error || 'None'}`);
         
         // Check if the result contains an error (speech recognition failed)
@@ -110,7 +111,7 @@ router.post('/query', upload.single('audio'), async (req, res) => {
           console.log('⚠️ Google Cloud speech recognition failed, falling back to mock mode');
           console.log(`Error in result: ${result.text}`);
           // Fall back to mock implementation
-          result = await processMockVoiceQuery(req.file.buffer, language, context);
+          result = await processMockVoiceQuery(req.file.buffer, language, context, userId);
           result.isMock = true;
           console.log(`🎭 Mock result - Query: "${result.userQuery}"`);
         }
@@ -118,14 +119,14 @@ router.post('/query', upload.single('audio'), async (req, res) => {
         console.log('⚠️ Google Cloud processing failed, falling back to mock mode');
         console.log(`Error: ${error.message}`);
         // Fall back to mock implementation
-        result = await processMockVoiceQuery(req.file.buffer, language, context);
+        result = await processMockVoiceQuery(req.file.buffer, language, context, userId);
         result.isMock = true;
         console.log(`🎭 Mock result - Query: "${result.userQuery}"`);
       }
     } else {
       console.log('🎭 Using mock implementation (Google Cloud not available)');
       // Use mock implementation for testing
-      result = await processMockVoiceQuery(req.file.buffer, language, context);
+      result = await processMockVoiceQuery(req.file.buffer, language, context, userId);
       result.isMock = true;
       console.log(`🎭 Mock result - Query: "${result.userQuery}"`);
     }
@@ -140,6 +141,7 @@ router.post('/query', upload.single('audio'), async (req, res) => {
         timestamp: result.timestamp,
         audio: result.audio.toString('base64'),
         context: context,
+        userId: userId,
         isMock: result.isMock || false
       }
     };

@@ -40,10 +40,10 @@ function App() {
   }
 
   const tabs = [
-    { id: 'voice', label: '🎤 Voice Chat', component: VoiceChat },
-    { id: 'diagnose', label: '🌱 Crop Diagnosis', component: Diagnose },
-    { id: 'prices', label: '💰 Market Prices', component: PriceScraper },
-    { id: 'chatbot', label: '🤖 Chatbot', component: Chatbot }
+    { id: 'voice', label: 'Voice Chat', component: VoiceChat },
+    { id: 'diagnose', label: 'Crop Diagnosis', component: Diagnose },
+    { id: 'prices', label: ' Market Prices', component: PriceScraper },
+    { id: 'chatbot', label: 'Chatbot', component: Chatbot }
   ];
 
   const ActiveComponent = tabs.find(tab => tab.id === activeTab)?.component || VoiceChat;

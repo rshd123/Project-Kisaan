@@ -1,4 +1,5 @@
 import React, { useState,useEffect } from 'react' 
+import { API_BASE_URL } from '../../config.js'
 
 import Body from './Body.jsx'
 import Chatform from './Chatform.jsx'
@@ -6,6 +7,29 @@ import Chatform from './Chatform.jsx'
 function Chatbot() {
   const [messages, setMessages] = useState([]); 
   const [started, setStarted] = useState(true);
+  const [userId] = useState(() => {
+    // Generate a unique user ID or use from localStorage
+    return localStorage.getItem('chatUserId') || (() => {
+      const newUserId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+      localStorage.setItem('chatUserId', newUserId);
+      return newUserId;
+    })();
+  });
+  const [isLoading, setIsLoading] = useState(false);
+
+  const clearChat = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/chatbot/history/${userId}`, {
+        method: 'DELETE'
+      });
+      
+      if (response.ok) {
+        setMessages([]);
+      }
+    } catch (error) {
+      console.error("Error clearing chat:", error);
+    }
+  };
 
   const addMessage = (messageText) => {
     const newMessage = {
@@ -13,6 +37,9 @@ function Chatbot() {
       sender: "user",
     };
     setMessages(prev => [...prev, newMessage]);
+    
+    // Generate bot response immediately after adding user message
+    generateBotResponse(messageText);
   };
 
   const addBotMessage = (messageText) => {
@@ -24,44 +51,67 @@ function Chatbot() {
   };
 
 
-  const generateBotResponse = async () => {
+  const generateBotResponse = async (userMessage) => {
     try {
-      const apiMessages = messages.map(({ sender, text }) => ({
-        role: sender === "user" ? "user" : "model",
-        parts: [{ text }]
-      }));
-      // console.log("API Messages:", apiMessages);
-
-      if (apiMessages.length === 0) return; 
-
+      setIsLoading(true);
+      
       const requestOptions = {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ contents: apiMessages })
+        headers: { 
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          userId: userId,
+          message: userMessage 
+        })
       };
 
-      const response = await fetch(import.meta.env.VITE_AI_API, requestOptions);
-      const data = await response.json();
-
-      addBotMessage(data.candidates?.[0]?.content?.parts?.[0]?.text || "Sorry, I couldn't understand that.");
+      const response = await fetch(`${API_BASE_URL}/api/chatbot/chat`, requestOptions);
       
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to fetch');
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
       
-      console.log(data);
-
+      const data = await response.json();
+      
+      if (data.success) {
+        addBotMessage(data.response);
+      } else {
+        throw new Error(data.error || 'Failed to get response from chatbot');
+      }
+      
     } catch (error) {
-      console.error("Error in API request:", error);
-      addBotMessage("Sorry, I encountered an error. Please try again.");
+      console.error("Error in chatbot API request:", error);
+      addBotMessage("Sorry, I encountered an error connecting to the server. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    if (messages.length > 0 && messages[messages.length - 1].sender === "user") {
-      generateBotResponse();
+    // Load conversation history when component mounts
+    const loadConversationHistory = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/chatbot/history/${userId}`);
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success && data.history) {
+            const formattedMessages = data.history.map(msg => ({
+              text: msg.content,
+              sender: msg.role === 'user' ? 'user' : 'bot'
+            }));
+            setMessages(formattedMessages);
+          }
+        }
+      } catch (error) {
+        console.error("Error loading conversation history:", error);
+      }
+    };
+
+    if (!started) {
+      loadConversationHistory();
     }
-  }, [messages]);
+  }, [started, userId]);
 
   return (
     <>
@@ -94,16 +144,25 @@ function Chatbot() {
                   <p className="text-blue-100 text-sm">Online</p>
                 </div>
               </div>
-              <button 
-                onClick={() => setStarted(true)}
-                className="text-blue-100 hover:text-white transition-colors"
-              >
-                <i className="fa-solid fa-times text-lg"></i>
-              </button>
+              <div className="flex items-center space-x-2">
+                <button 
+                  onClick={clearChat}
+                  className="text-blue-100 hover:text-white transition-colors p-1"
+                  title="Clear chat"
+                >
+                  <i className="fa-solid fa-trash text-sm"></i>
+                </button>
+                <button 
+                  onClick={() => setStarted(true)}
+                  className="text-blue-100 hover:text-white transition-colors"
+                >
+                  <i className="fa-solid fa-times text-lg"></i>
+                </button>
+              </div>
             </div>
           </div>
-          <Body messages={messages} />
-          <Chatform onSendMessage={addMessage} onBotMessage={addBotMessage} />
+          <Body messages={messages} isLoading={isLoading} />
+          <Chatform onSendMessage={addMessage} onBotMessage={addBotMessage} isLoading={isLoading} />
         </div>
       }
     </>

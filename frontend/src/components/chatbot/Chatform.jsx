@@ -1,13 +1,13 @@
 import React from 'react';
 import { useState,useEffect } from 'react';
 
-export default function Chatform({ onSendMessage, onBotMessage}) {
+export default function Chatform({ onSendMessage, onBotMessage, isLoading = false}) {
     const [message, setMessage] = useState('');
 
     const handleFormSubmit = (e) => {
         try {
             e.preventDefault();
-            if (message.trim()) {
+            if (message.trim() && !isLoading) {
                 onSendMessage(message);
                 setMessage('');
             }
@@ -21,17 +21,27 @@ export default function Chatform({ onSendMessage, onBotMessage}) {
             <form onSubmit={handleFormSubmit} className="flex space-x-2">
                 <input 
                     type="text" 
-                    placeholder="Ask me anything..." 
+                    placeholder={isLoading ? "Bot is typing..." : "Ask me anything..."} 
                     className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
                     required 
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
+                    disabled={isLoading}
                 />
                 <button 
                     type="submit" 
-                    className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+                    disabled={isLoading || !message.trim()}
+                    className={`px-4 py-2 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors ${
+                        isLoading || !message.trim() 
+                            ? 'bg-gray-400 cursor-not-allowed' 
+                            : 'bg-blue-500 hover:bg-blue-600'
+                    }`}
                 >
-                    <i className="fa-solid fa-paper-plane"></i>
+                    {isLoading ? (
+                        <i className="fa-solid fa-spinner fa-spin"></i>
+                    ) : (
+                        <i className="fa-solid fa-paper-plane"></i>
+                    )}
                 </button>
             </form>
         </div>

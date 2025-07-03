@@ -1,5 +1,5 @@
 // utils/mockVoiceAI.js - Temporary mock implementation for testing
-import { generativeModel } from './vertex.js';
+import { generativeModel, firestore } from './vertex.js';
 
 /**
  * Mock speech-to-text for testing without Google Cloud Speech API
@@ -29,12 +29,12 @@ async function mockSpeechToText(audioBuffer, languageCode = 'hi-IN') {
       'তুলায় সাদা মাছি আক্রমণ করেছে, কীভাবে রোধ করব?'
     ],
     'te-IN': [
-      'నా గోధుమ పంటలో పసుపు మచ్చలు కనిపిస్తున్নాయి, ఏమి చేయాలి?',
+      'నా గోధుమ పంటలో పసుపు మచ్చలు కనిపిస్తున్నాయి, ఏమి చేయాలి?',
       'టమాటో మొక్కలు వాడిపోతున్నాయి, సమస్య ఏమిటి?',
       'పత్తిలో తెల్ల ఈగలు దాడి చేస్తున్నాయి, ఎలా నియంత్రించాలి?'
     ]
   };
-  
+   
   const queries = sampleQueries[languageCode] || sampleQueries['en-IN'];
   const randomQuery = queries[Math.floor(Math.random() * queries.length)];
   
@@ -54,9 +54,9 @@ async function mockTextToSpeech(text, languageCode = 'hi-IN') {
 }
 
 /**
- * Enhanced prompt for agricultural advice
+ * Enhanced prompt for agricultural advice with conversation history
  */
-function createAgriculturalPrompt(userQuery, context, languageCode) {
+function createAgriculturalPrompt(userQuery, context, languageCode, conversationHistory = '') {
   const language = {
     'hi-IN': 'Hindi',
     'en-IN': 'English',
@@ -66,7 +66,7 @@ function createAgriculturalPrompt(userQuery, context, languageCode) {
     'ta-IN': 'Tamil'
   }[languageCode] || 'English';
   
-  return `You are "FarmMitra", an expert agricultural advisor with deep knowledge of Indian farming.
+  let prompt = `You are "FarmMitra", an expert agricultural advisor with deep knowledge of Indian farming.
 
 EXPERTISE AREAS:
 🌾 Crops: Rice, Wheat, Cotton, Sugarcane, Vegetables, Fruits
@@ -76,9 +76,18 @@ EXPERTISE AREAS:
 💰 Economics: Market prices, government schemes, cost optimization
 
 CONTEXT:
-Location: ${context.location || 'India'} | Season: ${context.season || 'Current'} | Crop: ${context.crop || 'General'} | Experience: ${context.experience || 'Moderate'}
+Location: ${context.location || 'India'} | Season: ${context.season || 'Current'} | Crop: ${context.crop || 'General'} | Experience: ${context.experience || 'Moderate'}`;
 
-FARMER ASKS: "${userQuery}"
+  if (conversationHistory) {
+    prompt += `
+
+PREVIOUS CONVERSATION:
+${conversationHistory}`;
+  }
+
+  prompt += `
+
+CURRENT QUESTION: "${userQuery}"
 
 INSTRUCTIONS:
 - Respond ONLY in ${language}
@@ -86,32 +95,124 @@ INSTRUCTIONS:
 - Include quantities, timing, and costs
 - Be encouraging and practical
 - Keep response 80-120 words
+- If this continues a previous conversation, reference earlier topics naturally
 - End with a helpful follow-up question
 
 Respond as expert FarmMitra in ${language}:`;
+
+  return prompt;
+}
+
+/**
+ * Save voice conversation to Firestore
+ */
+async function saveVoiceConversation(userId, userQuery, aiResponse, language) {
+  try {
+    if (!userId) {
+      console.log('No userId provided, skipping conversation save');
+      return;
+    }
+
+    console.log(`Saving voice conversation for user: ${userId}`);
+    
+    // Get existing conversation history
+    const conversationRef = firestore.collection('conversations').doc(userId);
+    const doc = await conversationRef.get();
+    
+    let chatHistory = [];
+    if (doc.exists) {
+      chatHistory = doc.data().messages || [];
+    }
+    
+    // Add user voice message
+    const userMessage = {
+      role: 'user',
+      content: userQuery,
+      timestamp: new Date(),
+      type: 'voice',
+      language: language
+    };
+    chatHistory.push(userMessage);
+    
+    // Add AI voice response
+    const aiMessage = {
+      role: 'assistant',
+      content: aiResponse,
+      timestamp: new Date(),
+      type: 'voice',
+      language: language
+    };
+    chatHistory.push(aiMessage);
+    
+    // Save updated conversation
+    await conversationRef.set({
+      userId: userId,
+      messages: chatHistory,
+      lastUpdated: new Date(),
+      messageCount: chatHistory.length,
+      hasVoiceMessages: true
+    });
+    
+    console.log('Voice conversation saved to Firestore');
+  } catch (error) {
+    console.error('Error saving voice conversation:', error);
+  }
+}
+
+/**
+ * Get conversation history for context
+ */
+async function getConversationContext(userId) {
+  try {
+    if (!userId) return '';
+    
+    const doc = await firestore.collection('conversations').doc(userId).get();
+    
+    if (doc.exists) {
+      const messages = doc.data().messages || [];
+      // Get last 5 exchanges for context
+      const recentMessages = messages.slice(-10);
+      
+      return recentMessages
+        .map(msg => `${msg.role}: ${msg.content}`)
+        .join('\n');
+    }
+    
+    return '';
+  } catch (error) {
+    console.error('Error getting conversation context:', error);
+    return '';
+  }
 }
 
 /**
  * Process voice query using mock services (for testing)
  */
-async function processMockVoiceQuery(audioBuffer, inputLanguage = 'hi-IN', context = {}) {
+async function processMockVoiceQuery(audioBuffer, inputLanguage = 'hi-IN', context = {}, userId = null) {
   try {
     console.log('🎤 Using mock voice processing for testing...');
+    console.log(`👤 User ID: ${userId || 'anonymous'}`);
     
     // Step 1: Mock speech-to-text
     const userQuery = await mockSpeechToText(audioBuffer, inputLanguage);
     console.log(`📝 Mock transcription: ${userQuery}`);
     
-    // Step 2: Get AI response
-    const enhancedPrompt = createAgriculturalPrompt(userQuery, context, inputLanguage);
-    console.log('🤖 Getting AI response...');
+    // Step 2: Get conversation history for context
+    const conversationHistory = await getConversationContext(userId);
+    
+    // Step 3: Get AI response with conversation context
+    const enhancedPrompt = createAgriculturalPrompt(userQuery, context, inputLanguage, conversationHistory);
+    console.log('🤖 Getting AI response with conversation context...');
     
     try {
       const result = await generativeModel.generateContent(enhancedPrompt);
       const aiResponse = result.response.candidates[0].content.parts[0].text;
       console.log(`💬 AI Response: ${aiResponse}`);
       
-      // Step 3: Mock text-to-speech
+      // Step 4: Save conversation to Firestore
+      await saveVoiceConversation(userId, userQuery, aiResponse, inputLanguage);
+      
+      // Step 5: Mock text-to-speech
       const responseAudio = await mockTextToSpeech(aiResponse, inputLanguage);
       
       return {
@@ -120,6 +221,7 @@ async function processMockVoiceQuery(audioBuffer, inputLanguage = 'hi-IN', conte
         audio: responseAudio,
         language: inputLanguage,
         timestamp: new Date().toISOString(),
+        userId: userId,
         isMock: true
       };
     } catch (aiError) {
@@ -136,12 +238,16 @@ async function processMockVoiceQuery(audioBuffer, inputLanguage = 'hi-IN', conte
       const fallbackResponse = fallbackResponses[inputLanguage] || fallbackResponses['en-IN'];
       const responseAudio = await mockTextToSpeech(fallbackResponse, inputLanguage);
       
+      // Save fallback conversation to Firestore
+      await saveVoiceConversation(userId, userQuery, fallbackResponse, inputLanguage);
+      
       return {
         userQuery: userQuery,
         text: fallbackResponse,
         audio: responseAudio,
         language: inputLanguage,
         timestamp: new Date().toISOString(),
+        userId: userId,
         isMock: true
       };
     }
@@ -153,7 +259,7 @@ async function processMockVoiceQuery(audioBuffer, inputLanguage = 'hi-IN', conte
       'hi-IN': 'नमस्कार! मैं आपका FarmMitra हूँ। अभी मैं डेमो मोड में काम कर रहा हूँ। कृपया Google Cloud APIs को सक्रिय करें पूरी सुविधा के लिए।',
       'en-IN': 'Hello! I am your FarmMitra. Currently working in demo mode. Please enable Google Cloud APIs for full functionality.',
       'bn-IN': 'নমস্কার! আমি আপনার FarmMitra। এখন আমি ডেমো মোডে কাজ করছি। সম্পূর্ণ কার্যকারিতার জন্য Google Cloud APIs সক্রিয় করুন।',
-      'te-IN': 'నమస్కారం! నేను మీ FarmMitra. ప్రస్তుతం డెమో మోడ్‌లో పని చేస్తున్నాను. పూర్తి కార్యాచరణ కోసం Google Cloud APIs ని ప్రారంభించండి।'
+      'te-IN': 'నమస్కారం! నేను మీ FarmMitra. ప్రస్తుతం డెమో మోడ్‌లో పని చేస్తున్నాను. పూర్తి కార్యాచరణ కోసం Google Cloud APIs ని ప్రారంభించండి।'
     };
     
     const errorMessage = errorMessages[inputLanguage] || errorMessages['en-IN'];
