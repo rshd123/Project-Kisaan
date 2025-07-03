@@ -4,6 +4,7 @@ import Diagnose from './components/Diagnoseform.jsx';
 import VoiceChat from './components/VoiceChat.jsx';
 import Chatbot from './components/chatbot/Chatbot.jsx';
 import LocationBanner from './components/LocationBanner.jsx';
+import FirebaseDataViewer from './components/FirebaseDataViewer.jsx';
 
 function App() {
   const [activeTab, setActiveTab] = useState('voice');
@@ -12,7 +13,8 @@ function App() {
     { id: 'voice', label: '🎤 Voice Chat', component: VoiceChat },
     { id: 'diagnose', label: '🌱 Crop Diagnosis', component: Diagnose },
     { id: 'prices', label: '💰 Market Prices', component: PriceScraper },
-    {id: 'chatbot', label: '🤖 Chatbot', component: Chatbot} 
+    {id: 'chatbot', label: '🤖 Chatbot', component: Chatbot},
+    {id: 'firebase', label: '🔥 Firebase Data', component: FirebaseDataViewer}
   ];
 
   const ActiveComponent = tabs.find(tab => tab.id === activeTab)?.component || VoiceChat;

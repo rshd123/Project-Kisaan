@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { API_BASE_URL } from '../config.js';
+import { FirebaseDataService } from '../utils/firebaseDataService.js';
 
 const PriceScraper = () => {
   const [market, setMarket] = useState('');
@@ -31,12 +32,61 @@ const PriceScraper = () => {
 
       if (res.data && res.data.rows?.length > 0) {
         setPriceData(res.data);
+        
+        // Save successful price search to Firestore
+        try {
+          const result = {
+            success: true,
+            pricesFound: res.data.rows.length,
+            averagePrice: res.data.rows.reduce((sum, row) => {
+              const price = parseFloat(row.Modal_Price) || 0;
+              return sum + price;
+            }, 0) / res.data.rows.length
+          };
+          
+          await FirebaseDataService.savePriceSearch(commodity, `${market}, Karnataka`, result);
+          console.log('✅ Price search saved to Firestore');
+        } catch (error) {
+          console.error('❌ Failed to save price search to Firestore:', error);
+          // Continue silently - don't disrupt user experience
+        }
       } else {
         setError('No data returned for selected options.');
+        
+        // Save failed price search to Firestore
+        try {
+          const result = {
+            success: false,
+            pricesFound: 0,
+            averagePrice: 0
+          };
+          
+          await FirebaseDataService.savePriceSearch(commodity, `${market}, Karnataka`, result);
+          console.log('✅ Failed price search saved to Firestore');
+        } catch (error) {
+          console.error('❌ Failed to save failed price search to Firestore:', error);
+          // Continue silently - don't disrupt user experience
+        }
       }
     } catch (err) {
       console.error(err);
       setError('Failed to fetch data.');
+      
+      // Save failed price search to Firestore
+      try {
+        const result = {
+          success: false,
+          pricesFound: 0,
+          averagePrice: 0,
+          error: err.message
+        };
+        
+        await FirebaseDataService.savePriceSearch(commodity, `${market}, Karnataka`, result);
+        console.log('✅ Failed price search attempt saved to Firestore');
+      } catch (error) {
+        console.error('❌ Failed to save failed price search to Firestore:', error);
+        // Continue silently - don't disrupt user experience
+      }
     }
     setLoading(false);
   };

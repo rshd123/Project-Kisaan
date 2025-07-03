@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { API_BASE_URL } from '../config.js';
+import { FirebaseDataService } from '../utils/firebaseDataService.js';
 
 const Diagnose = () => {
   const [farmerName, setFarmerName] = useState('');
@@ -37,9 +38,56 @@ const Diagnose = () => {
 
       const response = await axios.post(`${API_BASE_URL}/api/diagnose`, formData);
       setDiagnosis(response.data.diagnosis);
+      
+      // Save crop diagnosis to Firestore
+      try {
+        const inputData = {
+          farmerName,
+          hasImage: true,
+          fileName: image.name,
+          fileSize: image.size,
+          fileType: image.type
+        };
+        
+        const resultData = {
+          diagnosis: response.data.diagnosis,
+          timestamp: new Date().toISOString(),
+          success: true
+        };
+        
+        await FirebaseDataService.saveCropDiagnosis(inputData, resultData);
+        console.log('✅ Crop diagnosis saved to Firestore');
+      } catch (error) {
+        console.error('❌ Failed to save crop diagnosis to Firestore:', error);
+        // Continue silently - don't disrupt user experience
+      }
     } catch (err) {
       console.error(err);
       setError('Something went wrong while diagnosing.');
+      
+      // Save failed diagnosis attempt to Firestore
+      try {
+        const inputData = {
+          farmerName,
+          hasImage: true,
+          fileName: image.name,
+          fileSize: image.size,
+          fileType: image.type
+        };
+        
+        const resultData = {
+          diagnosis: null,
+          error: err.message,
+          timestamp: new Date().toISOString(),
+          success: false
+        };
+        
+        await FirebaseDataService.saveCropDiagnosis(inputData, resultData);
+        console.log('✅ Failed crop diagnosis attempt saved to Firestore');
+      } catch (error) {
+        console.error('❌ Failed to save failed diagnosis to Firestore:', error);
+        // Continue silently - don't disrupt user experience
+      }
     }
 
     setLoading(false);

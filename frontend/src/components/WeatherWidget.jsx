@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { WeatherService } from '../utils/weatherService.js';
 import { LocationService } from '../utils/locationService.js';
+import { FirebaseDataService } from '../utils/firebaseDataService.js';
 
 const WeatherWidget = ({ location, onLocationCorrect }) => {
   const [weatherState, setWeatherState] = useState({
@@ -56,11 +57,26 @@ const WeatherWidget = ({ location, onLocationCorrect }) => {
     }
   };
 
-  const handleWeatherFeedback = (isCorrect) => {
+  const handleWeatherFeedback = async (isCorrect) => {
     setWeatherState(prev => ({ ...prev, weatherCorrect: isCorrect }));
     
     if (!isCorrect) {
       setWeatherState(prev => ({ ...prev, showManualLocation: true }));
+    }
+    
+    // Save weather feedback to Firestore
+    if (weatherState.currentWeather && location) {
+      try {
+        await FirebaseDataService.saveWeatherFeedback(
+          weatherState.currentWeather,
+          isCorrect,
+          location
+        );
+        console.log('✅ Weather feedback saved to Firestore');
+      } catch (error) {
+        console.error('❌ Failed to save weather feedback to Firestore:', error);
+        // Continue silently - don't disrupt user experience
+      }
     }
   };
 
@@ -68,13 +84,17 @@ const WeatherWidget = ({ location, onLocationCorrect }) => {
     e.preventDefault();
     if (!weatherState.manualLocation.trim()) return;
 
+    const userInput = weatherState.manualLocation.trim();
+    let success = false;
+    let resolvedLocation = null;
+
     try {
       setWeatherState(prev => ({ ...prev, loading: true }));
       
       // Try to get weather directly by city name using OpenWeatherMap API
       const [currentWeather, forecast] = await Promise.all([
-        WeatherService.getWeatherByCity(weatherState.manualLocation),
-        WeatherService.getWeatherForecastByCity(weatherState.manualLocation)
+        WeatherService.getWeatherByCity(userInput),
+        WeatherService.getWeatherForecastByCity(userInput)
       ]);
 
       // Generate alerts and tips
@@ -88,8 +108,16 @@ const WeatherWidget = ({ location, onLocationCorrect }) => {
         longitude: currentWeather.location.lon || 0,
         address: currentWeather.location.name ? 
           `${currentWeather.location.name}, ${currentWeather.location.country}` : 
-          weatherState.manualLocation
+          userInput
       };
+      
+      resolvedLocation = {
+        location: {
+          name: currentWeather.location.name,
+          address: newLocation.address
+        }
+      };
+      success = true;
       
       // Update parent component about location change
       if (onLocationCorrect) {
@@ -114,8 +142,17 @@ const WeatherWidget = ({ location, onLocationCorrect }) => {
       setWeatherState(prev => ({
         ...prev,
         loading: false,
-        error: `Failed to get weather for "${weatherState.manualLocation}". Please check the city name and try again.`
+        error: `Failed to get weather for "${userInput}". Please check the city name and try again.`
       }));
+    }
+    
+    // Save manual location attempt to Firestore (success or failure)
+    try {
+      await FirebaseDataService.saveManualLocation(userInput, resolvedLocation, success);
+      console.log('✅ Manual location attempt saved to Firestore');
+    } catch (error) {
+      console.error('❌ Failed to save manual location to Firestore:', error);
+      // Continue silently - don't disrupt user experience
     }
   };
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { LocationService } from '../utils/locationService.js';
+import { FirebaseDataService } from '../utils/firebaseDataService.js';
 import WeatherWidget from './WeatherWidget.jsx';
 
 const LocationBanner = () => {
@@ -36,16 +37,28 @@ const LocationBanner = () => {
     }
   };
 
-  const handleLocationFeedback = (isCorrect) => {
+  const handleLocationFeedback = async (isCorrect) => {
     setLocationState(prev => ({ ...prev, isCorrect, showWeather: isCorrect }));
     
-    // Store user feedback for potential future improvements
+    // Store user feedback in both localStorage and Firestore
     if (locationState.location) {
-      localStorage.setItem('locationFeedback', JSON.stringify({
+      const feedbackData = {
         location: locationState.location,
         isCorrect,
         timestamp: new Date().toISOString()
-      }));
+      };
+      
+      // Keep localStorage for immediate access
+      localStorage.setItem('locationFeedback', JSON.stringify(feedbackData));
+      
+      // Save to Firestore for analytics and improvements
+      try {
+        await FirebaseDataService.saveLocationFeedback(locationState.location, isCorrect);
+        console.log('✅ Location feedback saved to Firestore');
+      } catch (error) {
+        console.error('❌ Failed to save location feedback to Firestore:', error);
+        // Continue silently - don't disrupt user experience
+      }
     }
   };
 

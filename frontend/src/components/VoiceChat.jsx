@@ -1,6 +1,7 @@
 // src/components/VoiceChat.jsx - Enhanced Voice-first interaction component
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import axios from 'axios';
+import { FirebaseDataService } from '../utils/firebaseDataService.js';
 
 const VoiceChat = () => {
   const [isRecording, setIsRecording] = useState(false);
@@ -204,6 +205,15 @@ const VoiceChat = () => {
         };
         
         setConversation(prev => [...prev, newMessage]);
+        
+        // Save voice chat interaction to Firestore
+        try {
+          await FirebaseDataService.saveVoiceChat(userQuery, aiResponse);
+          console.log('✅ Voice chat interaction saved to Firestore');
+        } catch (error) {
+          console.error('❌ Failed to save voice chat to Firestore:', error);
+          // Continue silently - don't disrupt user experience
+        }
         
         // Play AI response (in demo mode, this will be silent/placeholder)
         if (audio && !isMock) {
