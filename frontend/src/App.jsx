@@ -5,8 +5,9 @@ import VoiceChat from './components/VoiceChat.jsx';
 import Chatbot from './components/chatbot/Chatbot.jsx';
 import CommunityChat from './components/CommunityChat.jsx';
 import LocationBanner from './components/LocationBanner.jsx';
-import Dashboard from './components/Dashboard/Dashboard.jsx';
+import Auth from './components/Authentication/Auth.jsx';
 import { useAppContext } from './context/AppContext.jsx';
+import WeatherWidget from './components/WeatherWidget.jsx';
 
 function App() {
   const { isAuthenticated, user, logout, isLoading } = useAppContext();
@@ -35,17 +36,18 @@ function App() {
       <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
         {/* Show LocationBanner for location detection during signup */}
         <LocationBanner />
-        <Dashboard />
+        <Auth />
       </div>
     );
   }
 
   const tabs = [
-    { id: 'voice', label: '🎤 Voice Chat', component: VoiceChat },
-    { id: 'diagnose', label: '🌱 Crop Diagnosis', component: Diagnose },
-    { id: 'prices', label: '💰 Market Prices', component: PriceScraper },
-    { id: 'community', label: '💬 Community Chat', component: CommunityChat },
-    { id: 'chatbot', label: '🤖 Chatbot', component: Chatbot }
+    { id: 'voice', label: ' Voice Chat', component: VoiceChat },
+    { id: 'diagnose', label: ' Crop Diagnosis', component: Diagnose },
+    { id: 'prices', label: ' Market Prices', component: PriceScraper },
+    { id: 'community', label: ' Community Chat', component: CommunityChat },
+    { id: 'chatbot', label: ' Chatbot', component: Chatbot },
+    {id:'weather', label: ' Weather Forecast', component: WeatherWidget},
   ];
 
   const ActiveComponent = tabs.find(tab => tab.id === activeTab)?.component || VoiceChat;

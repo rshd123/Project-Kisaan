@@ -2,8 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { WeatherService } from '../utils/weatherService.js';
 import { LocationService } from '../utils/locationService.js';
 import { FirebaseDataService } from '../utils/firebaseDataService.js';
+import { useAppContext } from '../context/AppContext.jsx';
 
 const WeatherWidget = ({ location, onLocationCorrect }) => {
+  const { location: contextLocation } = useAppContext();
+  
+  // Use location from props first, then context, then null
+  const activeLocation = location || contextLocation;
   const [weatherState, setWeatherState] = useState({
     loading: true,
     currentWeather: null,
@@ -18,10 +23,10 @@ const WeatherWidget = ({ location, onLocationCorrect }) => {
   });
 
   useEffect(() => {
-    if (location && location.latitude && location.longitude) {
-      fetchWeatherData(location.latitude, location.longitude);
+    if (activeLocation && activeLocation.latitude && activeLocation.longitude) {
+      fetchWeatherData(activeLocation.latitude, activeLocation.longitude);
     }
-  }, [location]);
+  }, [activeLocation]);
 
   const fetchWeatherData = async (lat, lon) => {
     try {
@@ -65,12 +70,12 @@ const WeatherWidget = ({ location, onLocationCorrect }) => {
     }
     
     // Save weather feedback to Firestore
-    if (weatherState.currentWeather && location) {
+    if (weatherState.currentWeather && activeLocation) {
       try {
         await FirebaseDataService.saveWeatherFeedback(
           weatherState.currentWeather,
           isCorrect,
-          location
+          activeLocation
         );
         console.log('✅ Weather feedback saved to Firestore');
       } catch (error) {
@@ -179,15 +184,33 @@ const WeatherWidget = ({ location, onLocationCorrect }) => {
     }
   };
 
-  if (!location) {
-    return null;
+  if (!activeLocation) {
+    return (
+      <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
+        <div className="text-center py-8">
+          <div className="text-gray-500 mb-4">
+            <svg className="h-12 w-12 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+          </div>
+          <h3 className="text-lg font-medium text-gray-800 mb-2">Location Required</h3>
+          <p className="text-gray-600 mb-4">
+            We need your location to provide accurate weather information and farming tips.
+          </p>
+          <p className="text-sm text-gray-500">
+            Please allow location access or check the location banner above.
+          </p>
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold text-gray-800 flex items-center">
-          🌤️ Weather & Farming Insights
+           Weather & Farming Insights
         </h2>
       </div>
 
@@ -209,7 +232,7 @@ const WeatherWidget = ({ location, onLocationCorrect }) => {
               </div>
             </div>
             <button
-              onClick={() => location && fetchWeatherData(location.latitude, location.longitude)}
+              onClick={() => activeLocation && fetchWeatherData(activeLocation.latitude, activeLocation.longitude)}
               className="px-3 py-1 bg-red-500 text-white text-sm rounded-full hover:bg-red-600 transition-colors"
             >
               Retry

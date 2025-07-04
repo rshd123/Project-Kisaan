@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { LocationService } from '../utils/locationService.js';
 import { FirebaseDataService } from '../utils/firebaseDataService.js';
 import { useAppContext } from '../context/AppContext.jsx';
-import WeatherWidget from './WeatherWidget.jsx';
 
 const LocationBanner = () => {
   const { updateLocation } = useAppContext();
@@ -191,15 +190,7 @@ const LocationBanner = () => {
         </div>
       </div>
       
-      {/* Weather Widget */}
-      {(locationState.showWeather || locationState.isCorrect === false) && locationState.location && (
-        <div className="max-w-6xl mx-auto px-4 pb-4">
-          <WeatherWidget 
-            location={locationState.location} 
-            onLocationCorrect={handleLocationUpdate}
-          />
-        </div>
-      )}
+      {/* Weather Widget removed from here. Now only in Weather Forecast tab. */}
     </div>
   );
 };

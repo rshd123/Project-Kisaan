@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Login from './Login';
 import Signup from './Signup';
 
-const Dashboard = () => {
+const Auth = () => {
   const [activeTab, setActiveTab] = useState('signup');
 
   return (
@@ -37,4 +37,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Auth;
