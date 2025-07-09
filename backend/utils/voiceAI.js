@@ -73,14 +73,14 @@ async function speechToText(audioBuffer, languageCode = 'hi-IN', encoding = 'WEB
 
     console.log(`🎤 Processing speech in ${SUPPORTED_LANGUAGES[languageCode] || languageCode}...`);
     console.log(`📊 Audio buffer size: ${audioBuffer.length} bytes`);
-    
+
     const [response] = await speechClient.recognize(request);
-    
+
     if (!response.results || response.results.length === 0) {
       console.log('⚠️ No speech detected in audio');
       throw new Error('No speech detected in the audio. Please speak clearly and try again.');
     }
-    
+
     const transcription = response.results
       .map(result => result.alternatives[0].transcript)
       .join('\n')
@@ -93,11 +93,11 @@ async function speechToText(audioBuffer, languageCode = 'hi-IN', encoding = 'WEB
 
     console.log(`📝 Transcribed text: "${transcription}"`);
     console.log(`🎯 Confidence: ${response.results[0]?.alternatives[0]?.confidence || 'N/A'}`);
-    
+
     return transcription;
   } catch (error) {
     console.error('Speech-to-Text error:', error);
-    
+
     // Enhanced error handling
     if (error.code === 3) { // INVALID_ARGUMENT
       throw new Error('Audio format not supported. Please check your microphone settings.');
@@ -106,7 +106,7 @@ async function speechToText(audioBuffer, languageCode = 'hi-IN', encoding = 'WEB
     } else if (error.code === 14) { // UNAVAILABLE
       throw new Error('Speech recognition service temporarily unavailable.');
     }
-    
+
     throw new Error(`Speech recognition failed: ${error.message}`);
   }
 }
@@ -144,10 +144,10 @@ async function convertTextToSpeech(text, languageCode = 'hi-IN', voiceName = nul
     };
 
     console.log(`🔊 Generating speech in ${SUPPORTED_LANGUAGES[languageCode] || languageCode}...`);
-    
+
     const [response] = await ttsClient.synthesizeSpeech(request);
     console.log('✅ Speech generated successfully');
-    
+
     return response.audioContent;
   } catch (error) {
     console.error('Text-to-Speech error:', error);
@@ -166,24 +166,24 @@ async function processVoiceQuery(audioBuffer, inputLanguage = 'hi-IN', context =
   try {
     // Step 1: Convert speech to text
     const userQuery = await speechToText(audioBuffer, inputLanguage);
-    
+
     if (!userQuery || userQuery.trim().length === 0) {
       throw new Error('Could not understand the audio. Please try again.');
     }
 
     // Step 2: Create enhanced prompt for AI with agricultural context
     const enhancedPrompt = createAgriculturalPrompt(userQuery, context, inputLanguage);
-    
+
     // Step 3: Get AI response using Vertex AI
     console.log('🤖 Processing with Vertex AI...');
     const result = await generativeModel.generateContent(enhancedPrompt);
     const aiResponse = result.response.candidates[0].content.parts[0].text;
-    
+
     console.log(`💬 AI Response: ${aiResponse}`);
 
     // Step 4: Convert AI response back to speech
     const responseAudio = await convertTextToSpeech(aiResponse, inputLanguage);
-    
+
     return {
       userQuery: userQuery,
       text: aiResponse,
@@ -191,14 +191,14 @@ async function processVoiceQuery(audioBuffer, inputLanguage = 'hi-IN', context =
       language: inputLanguage,
       timestamp: new Date().toISOString()
     };
-    
+
   } catch (error) {
     console.error('Voice query processing error:', error);
-    
+
     // Generate error message in user's language
     const errorMessage = getErrorMessage(inputLanguage);
     const errorAudio = await convertTextToSpeech(errorMessage, inputLanguage);
-    
+
     return {
       userQuery: '',
       text: errorMessage,
@@ -215,7 +215,7 @@ async function processVoiceQuery(audioBuffer, inputLanguage = 'hi-IN', context =
  */
 function createAgriculturalPrompt(userQuery, context, languageCode) {
   const language = SUPPORTED_LANGUAGES[languageCode] || 'English';
-  
+
   return `You are "FarmMitra" (फार्म मित्र), an expert agricultural advisor with 20+ years of experience helping Indian farmers. You understand:
 
 🌾 CROPS: Wheat, Rice, Cotton, Sugarcane, Corn, Vegetables, Fruits, Pulses, Oilseeds
@@ -259,9 +259,7 @@ EXAMPLE RESPONSE STRUCTURE:
 Now respond as FarmMitra in ${language}:`;
 }
 
-/**
- * Get error messages in different languages
- */
+
 function getErrorMessage(languageCode) {
   const errorMessages = {
     'hi-IN': 'माफ करें, मुझे आपकी बात समझने में कुछ परेशानी हुई है। कृपया दोबारा कोशिश करें।',
@@ -276,13 +274,11 @@ function getErrorMessage(languageCode) {
     'pa-IN': 'ਮਾਫ਼ ਕਰਨਾ, ਮੈਨੂੰ ਤੁਹਾਡੀ ਗੱਲ ਸਮਝਣ ਵਿੱਚ ਮੁਸ਼ਕਲ ਹੋਈ ਹੈ। ਕਿਰਪਾ ਕਰਕੇ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।',
     'or-IN': 'ଦୁଃଖିତ, ମୁଁ ଆପଣଙ୍କ କଥା ବୁଝିବାରେ ଅସୁବିଧା ଭୋଗୁଛି। ଦୟାକରି ପୁନର୍ବାର ଚେଷ୍ଟା କରନ୍ତୁ।'
   };
-  
+
   return errorMessages[languageCode] || errorMessages['en-IN'];
 }
 
-/**
- * Get available voices for a language
- */
+
 async function getAvailableVoices(languageCode) {
   try {
     const [result] = await ttsClient.listVoices({ languageCode });
@@ -302,10 +298,10 @@ async function saveVoiceInteraction(interaction, filename) {
     if (!fs.existsSync(logsDir)) {
       fs.mkdirSync(logsDir, { recursive: true });
     }
-    
+
     const logFile = path.join(logsDir, `voice_${filename}_${Date.now()}.json`);
     fs.writeFileSync(logFile, JSON.stringify(interaction, null, 2));
-    
+
     if (interaction.audio) {
       const audioFile = path.join(logsDir, `voice_${filename}_${Date.now()}.mp3`);
       fs.writeFileSync(audioFile, interaction.audio);

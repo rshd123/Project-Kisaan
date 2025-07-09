@@ -8,6 +8,7 @@ import pricesRoutes from './routes/prices.js';
 import voiceRoutes from './routes/voice.js';
 import dataRoutes from './routes/data.js';
 import authRoutes from './routes/auth.js';
+import chatbotRoutes from './routes/chatbot.js';
 import { chatStorage } from './utils/chatStorage.js';
 
 dotenv.config();
@@ -40,6 +41,7 @@ app.use('/api/prices', pricesRoutes);
 app.use('/api/voice', voiceRoutes);
 app.use('/api/data', dataRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/chatbot', chatbotRoutes);
 
 // Store connected users
 const connectedUsers = new Map();
