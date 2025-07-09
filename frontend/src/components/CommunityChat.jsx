@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
 import { useAppContext } from '../context/AppContext.jsx';
+import { useLanguage } from '../context/LanguageContext.jsx';
 
 const CommunityChat = () => {
   const { user } = useAppContext();
+  const { translate } = useLanguage();
   const [socket, setSocket] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
@@ -159,7 +161,7 @@ const CommunityChat = () => {
             </div>
           ))}
           {onlineUsers.length === 0 && (
-            <p className="text-gray-500 text-sm text-center">No users online</p>
+            <p className="text-gray-500 text-sm text-center">{translate('noMessages')}</p>
           )}
         </div>
       </div>
@@ -169,15 +171,15 @@ const CommunityChat = () => {
         {/* Chat Header */}
         <div className="p-4 border-b border-gray-200 bg-green-50">
           <h2 className="text-lg font-semibold text-green-800 flex items-center">
-            💬 Community Chat
+            💬 {translate('communityTitle')}
             {!isConnected && (
               <span className="ml-2 text-sm text-red-600 font-normal">
-                (Connecting...)
+                ({translate('loading')})
               </span>
             )}
           </h2>
           <p className="text-sm text-green-600">
-            Connect with fellow farmers and share knowledge
+            {translate('joinConversation')}
           </p>
         </div>
 
@@ -185,8 +187,8 @@ const CommunityChat = () => {
         <div className="flex-1 overflow-y-auto p-4 space-y-3">
           {messages.length === 0 && (
             <div className="text-center text-gray-500 mt-10">
-              <p className="text-lg">👋 Welcome to the Community Chat!</p>
-              <p className="text-sm mt-2">Start a conversation with your fellow farmers</p>
+              <p className="text-lg">👋 {translate('joinConversation')}</p>
+              <p className="text-sm mt-2">{translate('shareExperience')}</p>
             </div>
           )}
           
@@ -233,7 +235,7 @@ const CommunityChat = () => {
               type="text"
               value={newMessage}
               onChange={handleTyping}
-              placeholder={isConnected ? "Type your message..." : "Connecting..."}
+              placeholder={isConnected ? translate('writeMessage') : translate('loading')}
               disabled={!isConnected}
               className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:bg-gray-100"
               maxLength={500}
@@ -243,7 +245,7 @@ const CommunityChat = () => {
               disabled={!newMessage.trim() || !isConnected}
               className="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
             >
-              Send
+              {translate('post')}
             </button>
           </form>
           <p className="text-xs text-gray-500 mt-2">

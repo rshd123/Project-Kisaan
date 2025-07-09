@@ -1,10 +1,12 @@
 import React, { useState,useEffect } from 'react' 
 import { API_BASE_URL } from '../../config.js'
+import { useLanguage } from '../../context/LanguageContext.jsx'
 
 import Body from './Body.jsx'
 import Chatform from './Chatform.jsx'
 
 function Chatbot() {
+  const { translate } = useLanguage();
   const [messages, setMessages] = useState([]); 
   const [started, setStarted] = useState(true);
   const [userId] = useState(() => {
@@ -119,14 +121,14 @@ function Chatbot() {
         started ?
         <div className="flex flex-col items-center justify-center h-full bg-gradient-to-br from-blue-50 to-indigo-100 p-8">
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">Welcome to MYGPT</h2>
-            <p className="text-gray-600 mb-8">Start a conversation with our AI assistant</p>
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">{translate('chatbotTitle')}</h2>
+            <p className="text-gray-600 mb-8">{translate('askQuestion')}</p>
             <button 
               className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 px-6 rounded-full transition-all duration-200 transform hover:scale-105 shadow-lg"
               onClick={() => setStarted(false)}
             >
               <i className="fa-solid fa-play mr-2"></i>
-              Start Chat
+              {translate('chatbot')}
             </button>
           </div>
         </div>
@@ -140,15 +142,15 @@ function Chatbot() {
                   <i className="fa-solid fa-robot text-sm"></i>
                 </div>
                 <div>
-                  <h3 className="font-semibold">MYGPT Assistant</h3>
-                  <p className="text-blue-100 text-sm">Online</p>
+                  <h3 className="font-semibold">{translate('chatbotTitle')}</h3>
+                  <p className="text-blue-100 text-sm">{translate('available')}</p>
                 </div>
               </div>
               <div className="flex items-center space-x-2">
                 <button 
                   onClick={clearChat}
                   className="text-blue-100 hover:text-white transition-colors p-1"
-                  title="Clear chat"
+                  title={translate('clearChat')}
                 >
                   <i className="fa-solid fa-trash text-sm"></i>
                 </button>

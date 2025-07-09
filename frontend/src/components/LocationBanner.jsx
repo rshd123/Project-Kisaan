@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { LocationService } from '../utils/locationService.js';
 import { FirebaseDataService } from '../utils/firebaseDataService.js';
 import { useAppContext } from '../context/AppContext.jsx';
+import { useLanguage } from '../context/LanguageContext.jsx';
 
 const LocationBanner = () => {
   const { updateLocation } = useAppContext();
+  const { translate } = useLanguage();
   const [locationState, setLocationState] = useState({
     loading: true,
     location: null,
@@ -113,24 +115,23 @@ const LocationBanner = () => {
             <div className="flex-1">
               {locationState.loading ? (
                 <div className="text-sm text-gray-600">
-                  <span className="font-medium">Detecting your location...</span>
-                  <span className="ml-2">This helps us provide local crop and market information.</span>
+                  <span className="font-medium">{translate('detectingLocation')}</span>
                 </div>
               ) : locationState.error ? (
                 <div className="text-sm">
-                  <span className="font-medium text-red-600">Location detection failed:</span>
+                  <span className="font-medium text-red-600">{translate('locationError')}:</span>
                   <span className="ml-2 text-gray-600">{locationState.error}</span>
                 </div>
               ) : (
                 <div className="text-sm">
-                  <span className="font-medium text-green-800">📍 Detected Location:</span>
+                  <span className="font-medium text-green-800">📍 {translate('locationDetected')}:</span>
                   <span className="ml-2 text-gray-700 font-medium">{locationState.location.address}</span>
                   {locationState.location.method === 'ip' && (
-                    <span className="ml-2 text-xs text-gray-500">(Approximate location based on internet connection)</span>
+                    <span className="ml-2 text-xs text-gray-500">(Approximate)</span>
                   )}
                   {locationState.location.accuracy && typeof locationState.location.accuracy === 'number' && (
                     <span className="ml-2 text-xs text-gray-500">
-                      (±{Math.round(locationState.location.accuracy)}m accuracy)
+                      (±{Math.round(locationState.location.accuracy)}m)
                     </span>
                   )}
                 </div>
@@ -138,31 +139,31 @@ const LocationBanner = () => {
               
               {locationState.location && locationState.isCorrect === null && (
                 <div className="mt-2">
-                  <span className="text-xs text-gray-600 mr-3">Is this location correct?</span>
+                  <span className="text-xs text-gray-600 mr-3">{translate('isLocationCorrect')}</span>
                   <button
                     onClick={() => handleLocationFeedback(true)}
                     className="text-xs bg-green-500 text-white px-3 py-1 rounded-full hover:bg-green-600 transition-colors mr-2"
                   >
-                    ✓ Yes, correct
+                    ✓ {translate('yes')}
                   </button>
                   <button
                     onClick={() => handleLocationFeedback(false)}
                     className="text-xs bg-red-500 text-white px-3 py-1 rounded-full hover:bg-red-600 transition-colors"
                   >
-                    ✗ No, incorrect
+                    ✗ {translate('no')}
                   </button>
                 </div>
               )}
               
               {locationState.isCorrect === true && (
                 <div className="mt-1 text-xs text-green-600 font-medium">
-                  ✓ Great! We'll use this location for personalized farming information.
+                  ✓ Thank you for confirming!
                 </div>
               )}
               
               {locationState.isCorrect === false && (
                 <div className="mt-1 text-xs text-orange-600">
-                  ⚠️ Thanks for the feedback. The weather widget below will help you enter the correct location.
+                  ⚠️ Thank you for the feedback. We'll improve our detection.
                 </div>
               )}
             </div>
@@ -174,13 +175,13 @@ const LocationBanner = () => {
                 onClick={retryLocation}
                 className="text-xs bg-blue-500 text-white px-3 py-1 rounded-full hover:bg-blue-600 transition-colors"
               >
-                Retry
+                {translate('retry')}
               </button>
             )}
             <button
               onClick={dismissBanner}
               className="text-gray-400 hover:text-gray-600 transition-colors"
-              title="Dismiss"
+              title={translate('close')}
             >
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

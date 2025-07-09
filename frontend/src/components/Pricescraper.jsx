@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { API_BASE_URL } from '../config.js';
 import { FirebaseDataService } from '../utils/firebaseDataService.js';
+import { useLanguage } from '../context/LanguageContext.jsx';
 
 const PriceScraper = () => {
+  const { translate } = useLanguage();
   const [market, setMarket] = useState('');
   const [commodity, setCommodity] = useState('');
   const [loading, setLoading] = useState(false);
@@ -15,7 +17,7 @@ const PriceScraper = () => {
 
   const handleScrape = async () => {
     if (!market || !commodity) {
-      setError('Please select both market and commodity.');
+      setError(translate('selectBothMarketCommodity'));
       return;
     }
 
@@ -51,7 +53,7 @@ const PriceScraper = () => {
           // Continue silently - don't disrupt user experience
         }
       } else {
-        setError('No data returned for selected options.');
+        setError(translate('noDataReturned'));
         
         // Save failed price search to Firestore
         try {
@@ -70,7 +72,7 @@ const PriceScraper = () => {
       }
     } catch (err) {
       console.error(err);
-      setError('Failed to fetch data.');
+      setError(translate('failedToFetchData'));
       
       // Save failed price search to Firestore
       try {
@@ -93,24 +95,24 @@ const PriceScraper = () => {
 
   return (
     <div className="p-4 max-w-3xl mx-auto">
-      <h2 className="text-2xl font-bold mb-4">Market Price Data</h2>
+      <h2 className="text-2xl font-bold mb-4">{translate('marketPricesTitle')}</h2>
       <div className="flex flex-col justify-center md:flex-row gap-4 mb-4">
         <select className="p-2 border rounded text-black" onChange={(e) => setMarket(e.target.value)} defaultValue="">
-          <option value="">-- Select Market --</option>
+          <option value="">{translate('selectMarket')}</option>
           {markets.map((mkt) => (
             <option key={mkt} value={mkt} className='text-black'>{mkt}</option>
           ))}
         </select>
 
         <select className="p-2 border rounded" onChange={(e) => setCommodity(e.target.value)} defaultValue="">
-          <option value="" >-- Select Commodity --</option>
+          <option value="">{translate('selectCommodity')}</option>
           {commodities.map((com) => (
             <option key={com} value={com}  className='text-black'>{com}</option>
           ))}
         </select>
 
         <button onClick={handleScrape} className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-           Scrape
+           {translate('scrape')}
         </button>
       </div>
 
@@ -118,7 +120,7 @@ const PriceScraper = () => {
         <div className="flex items-center justify-center py-8">
           <div className="flex items-center space-x-2">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
-            <span className="text-gray-600">Fetching data...</span>
+            <span className="text-gray-600">{translate('fetchingData')}</span>
           </div>
         </div>
       )}
@@ -126,7 +128,7 @@ const PriceScraper = () => {
 
       {priceData && (
         <div className="mt-6">
-          <h3 className="text-lg font-semibold mb-4">Price Data for {commodity} in {market}</h3>
+          <h3 className="text-lg font-semibold mb-4">{translate('priceDataFor')} {commodity} {translate('in')} {market}</h3>
           <div className="overflow-x-auto">
             <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow-md">
               <thead className="bg-gray-50">

@@ -2,8 +2,10 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { FirebaseDataService } from '../utils/firebaseDataService.js';
+import { useLanguage } from '../context/LanguageContext.jsx';
 
 const VoiceChat = () => {
+  const { translate } = useLanguage();
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [conversation, setConversation] = useState([]);
@@ -318,13 +320,13 @@ const VoiceChat = () => {
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <span className="mr-2">⚠️</span>
-                <span>Voice service is not available. Please check your connection.</span>
+                <span>{translate('disconnected')}</span>
               </div>
               <button
                 onClick={retryConnection}
                 className="bg-red-500 text-white px-3 py-1 rounded text-sm hover:bg-red-600"
               >
-                Retry
+                {translate('retry')}
               </button>
             </div>
           </div>
@@ -351,17 +353,17 @@ const VoiceChat = () => {
         {/* Header */}
         <div className="bg-white rounded-xl shadow-lg p-6 mb-6 text-center">
           <h1 className="text-3xl font-bold text-green-800 mb-2">
-            FarmMitra
+            {translate('voiceChatTitle')}
           </h1>
           <p className="text-gray-600 mb-4">
-            Choose your 
+            {translate('chooseYour')}
           </p>
           
           {/* Language Selection */}
           <div className="flex flex-wrap gap-4 mb-4">
             <div className="flex-1 min-w-48">
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Select your regional Language
+                {translate('selectRegionalLanguage')}
               </label>
               <select
                 value={selectedLanguage}
@@ -382,21 +384,21 @@ const VoiceChat = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
             <input
               type="text"
-              placeholder="Location"
+              placeholder={translate('location')}
               value={userContext.location}
               onChange={(e) => setUserContext(prev => ({ ...prev, location: e.target.value }))}
               className="p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500"
             />
             <input
               type="text"
-              placeholder="Season"
+              placeholder={translate('season')}
               value={userContext.season}
               onChange={(e) => setUserContext(prev => ({ ...prev, season: e.target.value }))}
               className="p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500"
             />
             <input
               type="text"
-              placeholder="Crop"
+              placeholder={translate('crop')}
               value={userContext.crop}
               onChange={(e) => setUserContext(prev => ({ ...prev, crop: e.target.value }))}
               className="p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500"
@@ -406,10 +408,11 @@ const VoiceChat = () => {
               onChange={(e) => setUserContext(prev => ({ ...prev, experience: e.target.value }))}
               className="p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500"
             >
-              <option value="">Experience</option>
-              <option value="नया किसान">New Farmer</option>
-              <option value="अनुभवी">Experienced</option>
-              <option value="विशेषज्ञ">Expert</option>
+              <option value="">{translate('experience')}</option>
+              <option value="beginner">{translate('beginner')}</option>
+              <option value="intermediate">{translate('intermediate')}</option>
+              <option value="advanced">{translate('advanced')}</option>
+              <option value="expert">{translate('expert')}</option>
             </select>
           </div>
         </div>
@@ -444,10 +447,10 @@ const VoiceChat = () => {
             
             <div className="text-center">
               <p className="text-lg font-medium text-gray-700">
-                {isRecording ? 'Speaking...' : 
-                 isProcessing ? 'Processing...' : 
-                 connectionStatus === 'disconnected' ? 'Service Unavailable' :
-                 'Press mic to speak'}
+                {isRecording ? translate('listening') : 
+                 isProcessing ? translate('processing') : 
+                 connectionStatus === 'disconnected' ? translate('unavailable') :
+                 translate('pressMicToSpeak')}
               </p>
               
               {isProcessing && (
@@ -459,8 +462,7 @@ const VoiceChat = () => {
               {/* Recording Tips */}
               {!isRecording && !isProcessing && (
                 <div className="mt-2 text-sm text-gray-500">
-                  <p>💡 Tips: Speak clearly in a quiet environment</p>
-                  <p>🔊 Audio will be played automatically after processing</p>
+                  <p>{translate('speakFreely')}</p>
                 </div>
               )}
             </div>
@@ -470,7 +472,7 @@ const VoiceChat = () => {
               className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors flex items-center space-x-2"
             >
               <span>🗑️</span>
-              <span>Clear</span>
+              <span>{translate('clear')}</span>
             </button>
           </div>
         </div>

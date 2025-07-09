@@ -137,7 +137,7 @@ async function convertTextToSpeech(text, languageCode = 'hi-IN', voiceName = nul
       voice: voiceConfig,
       audioConfig: {
         audioEncoding: 'MP3',
-        speakingRate: 0.9, // Slightly slower for better comprehension
+        speakingRate: 1.3, // Fast for super brief responses
         pitch: 0.0,
         volumeGainDb: 0.0,
       },
@@ -177,7 +177,10 @@ async function processVoiceQuery(audioBuffer, inputLanguage = 'hi-IN', context =
     // Step 3: Get AI response using Vertex AI
     console.log('🤖 Processing with Vertex AI...');
     const result = await generativeModel.generateContent(enhancedPrompt);
-    const aiResponse = result.response.candidates[0].content.parts[0].text;
+    let aiResponse = result.response.candidates[0].content.parts[0].text;
+    
+    // Step 3.5: Ensure response is concise and within limits
+    aiResponse = optimizeResponseLength(aiResponse, inputLanguage);
     
     console.log(`💬 AI Response: ${aiResponse}`);
 
@@ -238,25 +241,95 @@ ANALYSIS: First, identify if this is about:
 - Government Schemes (subsidies, loans, insurance)
 - General Farming (seeds, fertilizers, equipment)
 
-RESPONSE GUIDELINES:
-✅ Use ONLY ${language} language - simple, farmer-friendly words
-✅ Give specific, actionable steps with quantities/timing
-✅ Mention cost-effective solutions available locally
-✅ Include preventive measures for future
-✅ Reference local agricultural practices
-✅ Keep response practical and encouraging (100-150 words)
+CRITICAL RESPONSE RULES:
+✅ Use ONLY ${language} language 
+✅ Maximum 20-30 words TOTAL
+✅ Give ONLY 1-2 actions
+✅ NO greetings, NO long introductions
+✅ Direct answer ONLY
 
-EXAMPLE RESPONSE STRUCTURE:
-"मैं समझ गया आपकी समस्या। [Problem acknowledgment]
-यह [specific issue] की समस्या है। [Diagnosis]
-तुरंत करें: [Immediate action 1], [Immediate action 2]
-उपचार: [Treatment with dosage] 
-रोकथाम: [Prevention method]
-लागत: लगभग [cost estimate]
-कब तक परिणाम: [timeline]
-क्या आपने [follow-up question]?"
+STRICT FORMAT:
+"[problem]. करें: [action]. लागत: [cost]."
 
-Now respond as FarmMitra in ${language}:`;
+EXAMPLE: "पत्ती पीली है। यूरिया 10kg छिड़कें। लागत: 200 रुपये।"
+
+WORD LIMIT: 30 WORDS MAXIMUM - COUNT EVERY WORD!
+
+Respond in ${language} (MAX 30 WORDS):`;
+}
+
+/**
+ * Optimize response length to ensure concise, efficient answers
+ */
+function optimizeResponseLength(response, languageCode) {
+  // Remove excessive whitespace and line breaks
+  let optimized = response.replace(/\s+/g, ' ').trim();
+  
+  // Word count limits based on language (approximate)
+  const MAX_WORDS = {
+    'hi-IN': 25,     // Hindi - super compact
+    'en-IN': 30,     // English - slightly longer
+    'bn-IN': 25,     // Bengali
+    'te-IN': 25,     // Telugu
+    'mr-IN': 25,     // Marathi
+    'ta-IN': 25,     // Tamil
+    'gu-IN': 25,     // Gujarati
+    'kn-IN': 25,     // Kannada
+    'ml-IN': 25,     // Malayalam
+    'pa-IN': 25,     // Punjabi
+    'or-IN': 25      // Odia
+  };
+  
+  const maxWords = MAX_WORDS[languageCode] || 30;
+  const words = optimized.split(' ');
+  
+  // If response is too long, truncate aggressively
+  if (words.length > maxWords) {
+    const truncated = words.slice(0, maxWords - 2).join(' ');
+    
+    // Add brief ending based on language
+    const endings = {
+      'hi-IN': '... और?',
+      'en-IN': '... more?',
+      'bn-IN': '... আরো?',
+      'te-IN': '... మరింత?',
+      'mr-IN': '... अधिक?',
+      'ta-IN': '... மேலும்?',
+      'gu-IN': '... વધુ?',
+      'kn-IN': '... ಹೆಚ್ಚು?',
+      'ml-IN': '... കൂടുതൽ?',
+      'pa-IN': '... ਹੋਰ?',
+      'or-IN': '... ଅଧିକ?'
+    };
+    
+    optimized = truncated + (endings[languageCode] || endings['en-IN']);
+  }
+  
+  // Remove redundant phrases and filler words aggressively
+  const fillerPhrases = {
+    'hi-IN': [
+      'मैं समझ गया', 'आपकी समस्या', 'जैसा कि', 'इसके अलावा', 'यह जरूरी है कि',
+      'नमस्ते', 'हैलो', 'धन्यवाद', 'आपका', 'स्वागत', 'मुझे लगता है', 'शायद',
+      'संभवतः', 'निश्चित रूप से', 'बिल्कुल', 'वास्तव में', 'अच्छा सवाल'
+    ],
+    'en-IN': [
+      'I understand', 'your problem', 'as you know', 'in addition', 'it is important that',
+      'hello', 'hi', 'thank you', 'welcome', 'I think', 'maybe', 'probably',
+      'definitely', 'absolutely', 'really', 'good question'
+    ],
+  };
+  
+  const fillers = fillerPhrases[languageCode] || [];
+  fillers.forEach(filler => {
+    optimized = optimized.replace(new RegExp(filler, 'gi'), '');
+  });
+  
+  // Clean up extra spaces
+  optimized = optimized.replace(/\s+/g, ' ').trim();
+  
+  console.log(`📏 Response optimized: ${words.length} → ${optimized.split(' ').length} words`);
+  
+  return optimized;
 }
 
 /**

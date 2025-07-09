@@ -3,9 +3,11 @@ import { WeatherService } from '../utils/weatherService.js';
 import { LocationService } from '../utils/locationService.js';
 import { FirebaseDataService } from '../utils/firebaseDataService.js';
 import { useAppContext } from '../context/AppContext.jsx';
+import { useLanguage } from '../context/LanguageContext.jsx';
 
 const WeatherWidget = ({ location, onLocationCorrect }) => {
   const { location: contextLocation } = useAppContext();
+  const { translate } = useLanguage();
   
   // Use location from props first, then context, then null
   const activeLocation = location || contextLocation;
@@ -194,9 +196,9 @@ const WeatherWidget = ({ location, onLocationCorrect }) => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
           </div>
-          <h3 className="text-lg font-medium text-gray-800 mb-2">Location Required</h3>
+          <h3 className="text-lg font-medium text-gray-800 mb-2">{translate('locationRequired')}</h3>
           <p className="text-gray-600 mb-4">
-            We need your location to provide accurate weather information and farming tips.
+            {translate('locationRequiredDesc')}
           </p>
           <p className="text-sm text-gray-500">
             Please allow location access or check the location banner above.
@@ -210,14 +212,14 @@ const WeatherWidget = ({ location, onLocationCorrect }) => {
     <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold text-gray-800 flex items-center">
-           Weather & Farming Insights
+           {translate('weatherTitle')}
         </h2>
       </div>
 
       {weatherState.loading ? (
         <div className="flex items-center justify-center py-8">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mr-3"></div>
-          <span className="text-gray-600">Getting weather information...</span>
+          <span className="text-gray-600">{translate('loading')}</span>
         </div>
       ) : weatherState.error ? (
         <div className="bg-red-50 border border-red-200 rounded-lg p-4">
@@ -227,7 +229,7 @@ const WeatherWidget = ({ location, onLocationCorrect }) => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               <div>
-                <span className="text-red-600 font-medium">Weather Error:</span>
+                <span className="text-red-600 font-medium">{translate('weatherTitle')} Error:</span>
                 <div className="text-red-600 text-sm mt-1">{weatherState.error}</div>
               </div>
             </div>
@@ -235,7 +237,7 @@ const WeatherWidget = ({ location, onLocationCorrect }) => {
               onClick={() => activeLocation && fetchWeatherData(activeLocation.latitude, activeLocation.longitude)}
               className="px-3 py-1 bg-red-500 text-white text-sm rounded-full hover:bg-red-600 transition-colors"
             >
-              Retry
+              {translate('retry')}
             </button>
           </div>
         </div>
@@ -245,7 +247,7 @@ const WeatherWidget = ({ location, onLocationCorrect }) => {
           <div className="bg-gradient-to-r from-blue-50 to-green-50 rounded-lg p-4">
             <div className="flex items-center justify-between mb-3">
               <div>
-                <h3 className="text-lg font-semibold text-gray-800">Current Weather</h3>
+                <h3 className="text-lg font-semibold text-gray-800">{translate('currentWeather')}</h3>
                 {weatherState.currentWeather.location.name && (
                   <p className="text-sm text-gray-600">
                     📍 {weatherState.currentWeather.location.name}, {weatherState.currentWeather.location.country}
@@ -258,15 +260,15 @@ const WeatherWidget = ({ location, onLocationCorrect }) => {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
               <div className="text-center">
                 <div className="text-2xl font-bold text-blue-600">{weatherState.currentWeather.current.temperature}°C</div>
-                <div className="text-sm text-gray-600">Temperature</div>
+                <div className="text-sm text-gray-600">{translate('temperature')}</div>
               </div>
               <div className="text-center">
                 <div className="text-xl font-semibold text-gray-700">{weatherState.currentWeather.current.humidity}%</div>
-                <div className="text-sm text-gray-600">Humidity</div>
+                <div className="text-sm text-gray-600">{translate('humidity')}</div>
               </div>
               <div className="text-center">
                 <div className="text-xl font-semibold text-gray-700">{weatherState.currentWeather.current.windSpeed.toFixed(1)} m/s</div>
-                <div className="text-sm text-gray-600">Wind Speed</div>
+                <div className="text-sm text-gray-600">{translate('windSpeed')}</div>
               </div>
               <div className="text-center">
                 <div className="text-xl font-semibold text-gray-700 capitalize">{weatherState.currentWeather.current.description}</div>
@@ -278,19 +280,19 @@ const WeatherWidget = ({ location, onLocationCorrect }) => {
             {weatherState.weatherCorrect === null && (
               <div className="bg-white rounded-md p-3 border">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600">Does this weather information look correct for your area?</span>
+                  <span className="text-sm text-gray-600">{translate('isWeatherCorrect')}</span>
                   <div className="flex space-x-2">
                     <button
                       onClick={() => handleWeatherFeedback(true)}
                       className="px-3 py-1 bg-green-500 text-white text-sm rounded-full hover:bg-green-600 transition-colors"
                     >
-                      ✓ Yes, correct
+                      ✓ {translate('yes')}
                     </button>
                     <button
                       onClick={() => handleWeatherFeedback(false)}
                       className="px-3 py-1 bg-red-500 text-white text-sm rounded-full hover:bg-red-600 transition-colors"
                     >
-                      ✗ No, incorrect
+                      ✗ {translate('no')}
                     </button>
                   </div>
                 </div>
@@ -307,20 +309,20 @@ const WeatherWidget = ({ location, onLocationCorrect }) => {
           {/* Manual Location Input */}
           {weatherState.showManualLocation && (
             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-              <h4 className="font-medium text-gray-800 mb-3">Please enter your correct location:</h4>
+              <h4 className="font-medium text-gray-800 mb-3">{translate('enterCorrectLocation')}</h4>
               <form onSubmit={handleManualLocationSubmit} className="flex space-x-2">
                 <input
                   type="text"
                   value={weatherState.manualLocation}
                   onChange={(e) => setWeatherState(prev => ({ ...prev, manualLocation: e.target.value }))}
-                  placeholder="Enter city name (e.g., Mumbai, Delhi, Bangalore)"
+                  placeholder={translate('cityName')}
                   className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 />
                 <button
                   type="submit"
                   className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors"
                 >
-                  Update Location
+                  {translate('update')}
                 </button>
               </form>
             </div>
@@ -329,7 +331,7 @@ const WeatherWidget = ({ location, onLocationCorrect }) => {
           {/* Weather Alerts */}
           {weatherState.alerts.length > 0 && (
             <div>
-              <h3 className="text-lg font-semibold text-gray-800 mb-3">🚨 Weather Alerts</h3>
+              <h3 className="text-lg font-semibold text-gray-800 mb-3">🚨 {translate('weatherAlerts')}</h3>
               <div className="space-y-2">
                 {weatherState.alerts.map((alert, index) => (
                   <div
@@ -356,7 +358,7 @@ const WeatherWidget = ({ location, onLocationCorrect }) => {
           {/* Tomorrow's Forecast */}
           {weatherState.forecast && (
             <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg p-4">
-              <h3 className="text-lg font-semibold text-gray-800 mb-3">📅 Tomorrow's Forecast</h3>
+              <h3 className="text-lg font-semibold text-gray-800 mb-3">📅 {translate('dayForecast')}</h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="text-center">
                   <div className="text-xl font-bold text-purple-600">{weatherState.forecast.tomorrow.maxTemp}°C</div>
@@ -368,7 +370,7 @@ const WeatherWidget = ({ location, onLocationCorrect }) => {
                 </div>
                 <div className="text-center">
                   <div className="text-lg font-semibold text-gray-700">{weatherState.forecast.tomorrow.humidity}%</div>
-                  <div className="text-sm text-gray-600">Humidity</div>
+                  <div className="text-sm text-gray-600">{translate('humidity')}</div>
                 </div>
                 <div className="text-center">
                   <div className="text-lg font-semibold text-gray-700 capitalize">{weatherState.forecast.tomorrow.description}</div>
@@ -380,7 +382,7 @@ const WeatherWidget = ({ location, onLocationCorrect }) => {
 
           {/* Farming Tips */}
           <div>
-            <h3 className="text-lg font-semibold text-gray-800 mb-3">🌾 Today's Farming Tips</h3>
+            <h3 className="text-lg font-semibold text-gray-800 mb-3">🌾 {translate('farmingTips')}</h3>
             <div className="grid gap-3">
               {weatherState.tips.map((tip, index) => (
                 <div
@@ -409,7 +411,7 @@ const WeatherWidget = ({ location, onLocationCorrect }) => {
           {/* Tomorrow's Tips */}
           {weatherState.tomorrowTips.length > 0 && (
             <div>
-              <h3 className="text-lg font-semibold text-gray-800 mb-3">📋 Tomorrow's Planning</h3>
+              <h3 className="text-lg font-semibold text-gray-800 mb-3">📋 {translate('tomorrowFarmingTips')}</h3>
               <div className="grid gap-3">
                 {weatherState.tomorrowTips.map((tip, index) => (
                   <div

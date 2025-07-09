@@ -1,7 +1,9 @@
 import React from 'react';
 import { useState,useEffect } from 'react';
+import { useLanguage } from '../../context/LanguageContext.jsx';
 
 export default function Chatform({ onSendMessage, onBotMessage, isLoading = false}) {
+    const { translate } = useLanguage();
     const [message, setMessage] = useState('');
 
     const handleFormSubmit = (e) => {
@@ -21,7 +23,7 @@ export default function Chatform({ onSendMessage, onBotMessage, isLoading = fals
             <form onSubmit={handleFormSubmit} className="flex space-x-2">
                 <input 
                     type="text" 
-                    placeholder={isLoading ? "Bot is typing..." : "Ask me anything..."} 
+                    placeholder={isLoading ? translate('thinking') : translate('typeMessage')} 
                     className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
                     required 
                     value={message}

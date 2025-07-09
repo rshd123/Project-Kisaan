@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { API_BASE_URL } from '../config.js';
 import { FirebaseDataService } from '../utils/firebaseDataService.js';
+import { useLanguage } from '../context/LanguageContext.jsx';
 
 const Diagnose = () => {
+  const { translate } = useLanguage();
   const [farmerName, setFarmerName] = useState('');
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState('');
@@ -23,7 +25,7 @@ const Diagnose = () => {
 
   const handleDiagnose = async () => {
     if (!farmerName || !image) {
-      setError('Please enter the farmer\'s name and upload an image.');
+      setError(translate('enterNameAndImage'));
       return;
     }
 
@@ -63,7 +65,7 @@ const Diagnose = () => {
       }
     } catch (err) {
       console.error(err);
-      setError('Something went wrong while diagnosing.');
+      setError(translate('diagnosisError'));
       
       // Save failed diagnosis attempt to Firestore
       try {
@@ -95,13 +97,13 @@ const Diagnose = () => {
 
   return (
     <div className="p-4 max-w-2xl mx-auto">
-      <h2 className="text-2xl font-bold mb-4">Crop Disease Diagnosis</h2>
+      <h2 className="text-2xl font-bold mb-4">{translate('diagnosisTitle')}</h2>
 
       <div className="flex flex-col gap-4">
         <input
           type="text"
           className="p-2 border rounded"
-          placeholder="Enter Farmer's Name"
+          placeholder={translate('enterFarmerName')}
           value={farmerName}
           onChange={(e) => setFarmerName(e.target.value)}
         />
@@ -121,21 +123,21 @@ const Diagnose = () => {
           onClick={handleDiagnose}
           className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
         >
-          Diagnose
+          {translate('diagnose')}
         </button>
 
         {loading && (
           <div className="flex items-center justify-center py-8">
             <div className="flex items-center space-x-2">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
-              <span className="text-gray-600">Fetching Diagnosis....</span>
+              <span className="text-gray-600">{translate('fetchingDiagnosis')}</span>
             </div>
           </div>
         )}
         {error && <p className="text-red-600">{error}</p>}
         {diagnosis && (
           <div className="mt-4 p-4 border rounded bg-green-100 text-green-900">
-            <h3 className="font-semibold mb-2">Diagnosis in Kannada:</h3>
+            <h3 className="font-semibold mb-2">{translate('diagnosisInKannada')}</h3>
             <p>{diagnosis}</p>
           </div>
         )}
