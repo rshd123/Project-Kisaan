@@ -1,7 +1,7 @@
 import express from 'express';
 import multer from 'multer';
 import fs from 'fs';
-import { generativeModel, firestore } from '../utils/vertex.js';
+import { generativeModel, supabase } from '../utils/vertex.js';
 
 const router = express.Router();
 const upload = multer({ dest: 'uploads/' });
@@ -9,7 +9,6 @@ const upload = multer({ dest: 'uploads/' });
 router.post('/', upload.single('image'), async (req, res) => {
   const { farmerName } = req.body;
   
-  // Validate input
   if (!req.file) {
     return res.status(400).json({ error: 'No image file uploaded' });
   }
@@ -49,20 +48,26 @@ router.post('/', upload.single('image'), async (req, res) => {
     }
     console.log('Diagnosis:', diagnosis);
     
-    console.log('Saving to Firestore...');
-    await firestore.collection('diagnosis').add({
-      farmer: farmerName,
-      diagnosis,
-      image: req.file.originalname
-    });
+    console.log('Saving to Supabase...');
+    const { error } = await supabase
+      .from('diagnosis')
+      .insert({
+        farmer: farmerName,
+        diagnosis,
+        image: req.file.originalname
+      });
 
-    console.log('Data saved to Firestore successfully');
+    if (error) {
+      console.error('Supabase insert error:', error);
+      throw new Error('Failed to save diagnosis to database');
+    }
+
+    console.log('Data saved to Supabase successfully');
     res.json({ success: true, diagnosis });
   } catch (err) {
     console.error('Diagnosis error:', err);
     res.status(500).json({ error: 'Failed to process diagnosis request' });
   } finally {
-    // Clean up uploaded file
     if (imagePath && fs.existsSync(imagePath)) {
       fs.unlinkSync(imagePath);
     }

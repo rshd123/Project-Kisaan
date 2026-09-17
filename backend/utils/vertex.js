@@ -1,5 +1,5 @@
 import { VertexAI } from '@google-cloud/vertexai';
-import { Firestore } from '@google-cloud/firestore';
+import { createClient } from '@supabase/supabase-js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
@@ -22,7 +22,11 @@ console.log('Service account path:', serviceAccountPath);
 
 process.env.GOOGLE_APPLICATION_CREDENTIALS = serviceAccountPath;
 
-const firestore = new Firestore({ projectId: project });
+// Supabase client
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_ANON_KEY
+);
 
 const vertexAI = new VertexAI({
   project: project,
@@ -31,4 +35,4 @@ const vertexAI = new VertexAI({
 
 const generativeModel = vertexAI.getGenerativeModel({ model: 'gemini-2.0-flash-001' });
 
-export { firestore, generativeModel };
+export { supabase, generativeModel };
