@@ -1,0 +1,932 @@
+{
+  "diseases": [
+    {
+      "id": "late_blight_potato",
+      "name": "Late Blight",
+      "crops": ["Potato", "Tomato"],
+      "symptoms": ["dark water-soaked spots on leaves", "white fungal growth on leaf underside", "brown lesions spreading rapidly", "leaf rot and plant death"],
+      "cause": "Phytophthora infestans (Oomycete fungus)",
+      "severity": "high",
+      "treatments": [
+        {"name": "Metalaxyl + Mancozeb", "dosage": "2.5g per liter of water", "cost": "~Rs 400/kg", "frequency": "Spray every 7-10 days"},
+        {"name": "Chlorothalonil", "dosage": "2ml per liter of water", "cost": "~Rs 350/liter", "frequency": "Spray at first sign, repeat after 10 days"},
+        {"name": "Fosetyl Aluminum", "dosage": "3g per liter of water", "cost": "~Rs 500/kg", "frequency": "Spray weekly"}
+      ],
+      "prevention": ["Use certified disease-free seed potatoes", "Plant resistant varieties (Kufri Jyoti, Kufri Ganga)", "Avoid overhead irrigation", "Remove and destroy infected plant debris", "Ensure proper drainage between rows"],
+      "season": "Kharif and Rabi (most severe during wet monsoon)",
+      "government_scheme": "Crop insurance available under Pradhan Mantri Fasal Bima Yojana (PMFBY)"
+    },
+    {
+      "id": "early_blight_tomato",
+      "name": "Early Blight",
+      "crops": ["Tomato", "Potato"],
+      "symptoms": ["concentric ring spots on older leaves", "target-shaped dark brown lesions", "leaf yellowing and dropping", "fruit lesions with dark rings"],
+      "cause": "Alternaria solani (Fungal pathogen)",
+      "severity": "medium",
+      "treatments": [
+        {"name": "Mancozeb", "dosage": "2.5g per liter of water", "cost": "~Rs 200/kg", "frequency": "Spray every 10 days"},
+        {"name": "Copper Hydroxide", "dosage": "3g per liter of water", "cost": "~Rs 300/kg", "frequency": "Spray at symptom appearance"},
+        {"name": "Azoxystrobin", "dosage": "1ml per liter of water", "cost": "~Rs 600/liter", "frequency": "Spray every 14 days"}
+      ],
+      "prevention": ["Rotate crops every 2-3 seasons", "Remove infected plant debris", "Use resistant varieties", "Avoid wetting leaves during irrigation", "Maintain adequate plant spacing"],
+      "season": "Year-round, worse during warm humid conditions",
+      "government_scheme": "Subsidies available through Karnataka State Horticulture Department"
+    },
+    {
+      "id": "bacterial_blight_rice",
+      "name": "Bacterial Leaf Blight",
+      "crops": ["Rice"],
+      "symptoms": ["yellow-orange stripes along leaf veins", "leaf tips drying and turning brown", "bacterial ooze on leaves in morning", "plant wilting and death in severe cases"],
+      "cause": "Xanthomonas oryzae pv. oryzae (Bacterium)",
+      "severity": "high",
+      "treatments": [
+        {"name": "Copper Hydroxide", "dosage": "3g per liter of water", "cost": "~Rs 300/kg", "frequency": "Spray at first symptom"},
+        {"name": "Streptocycline", "dosage": "500ppm solution", "cost": "~Rs 150/vial", "frequency": "Foliar spray, repeat after 10 days"},
+        {"name": "Bordeaux Mixture", "dosage": "1% solution", "cost": "~Rs 100/kg", "frequency": "Preventive spray before monsoon"}
+      ],
+      "prevention": ["Use resistant varieties (Improved Samba Mahsuri, IR-64)", "Avoid excess nitrogen fertilizer", "Maintain proper water management", "Remove weed hosts", "Use balanced fertilization"],
+      "season": "Kharif (monsoon season, July-October)",
+      "government_scheme": "Free seeds available for resistant varieties through Karnataka State Seeds Corporation"
+    },
+    {
+      "id": "blast_rice",
+      "name": "Rice Blast",
+      "crops": ["Rice"],
+      "symptoms": ["diamond-shaped lesions on leaves", "gray centers with brown borders", "neck blast causing grain shattering", "spindle-shaped spots on leaf collar"],
+      "cause": "Magnaporthe oryzae (Fungal pathogen)",
+      "severity": "high",
+      "treatments": [
+        {"name": "Tricyclazole", "dosage": "0.6g per liter of water", "cost": "~Rs 450/kg", "frequency": "Spray at booting stage"},
+        {"name": "Isoprothiolane", "dosage": "1.5ml per liter", "cost": "~Rs 550/liter", "frequency": "Spray at tillering and booting"},
+        {"name": "Carbendazim", "dosage": "1g per liter of water", "cost": "~Rs 250/kg", "frequency": "Spray at disease appearance"}
+      ],
+      "prevention": ["Use blast-resistant varieties (Samba Mahsuri, IR-64)", "Avoid excess nitrogen", "Maintain balanced N:P:K ratio", "Keep proper water level in field", "Treat seed with Tricyclazole before sowing"],
+      "season": "Kharif and Rabi (depends on moisture and temperature)",
+      "government_scheme": "Seed treatment kits distributed free by Krishi Vigyan Kendra (KVK)"
+    },
+    {
+      "id": "yellow_rust_wheat",
+      "name": "Yellow Rust (Stripe Rust)",
+      "crops": ["Wheat"],
+      "symptoms": ["yellow stripes on leaves", "powdery yellow pustules in rows", "leaf chlorosis and drying", "reduced grain filling"],
+      "cause": "Puccinia striiformis f. sp. tritici (Fungal pathogen)",
+      "severity": "high",
+      "treatments": [
+        {"name": "Propiconazole", "dosage": "1ml per liter of water", "cost": "~Rs 400/liter", "frequency": "Spray at first symptom"},
+        {"name": "Tebuconazole", "dosage": "0.5ml per liter", "cost": "~Rs 500/liter", "frequency": "Single spray at flag leaf stage"},
+        {"name": "Mancozeb", "dosage": "2.5g per liter", "cost": "~Rs 200/kg", "frequency": "Preventive spray"}
+      ],
+      "prevention": ["Use resistant varieties (HD-3226, PBW-723)", "Early sowing reduces severity", "Avoid late sowing", "Balanced nitrogen application", "Remove grassy weeds from field borders"],
+      "season": "Rabi (January-March, cool and moist conditions)",
+      "government_scheme": "Wheat seeds subsidized through National Food Security Mission (NFSM)"
+    },
+    {
+      "id": "powdery_mildew_wheat",
+      "name": "Powdery Mildew",
+      "crops": ["Wheat", "Barley"],
+      "symptoms": ["white powdery coating on leaves", "leaf yellowing beneath spots", "stunted plant growth", "premature leaf drying"],
+      "cause": "Blumeria graminis f. sp. tritici (Fungal pathogen)",
+      "severity": "medium",
+      "treatments": [
+        {"name": "Sulfur Dust", "dosage": "25kg per hectare", "cost": "~Rs 60/kg", "frequency": "Dust at disease onset"},
+        {"name": "Propiconazole", "dosage": "1ml per liter", "cost": "~Rs 400/liter", "frequency": "Foliar spray at early infection"},
+        {"name": "Tebuconazole + Sulfur", "dosage": "0.5ml per liter", "cost": "~Rs 500/liter", "frequency": "Spray at tillering stage"}
+      ],
+      "prevention": ["Use resistant varieties", "Avoid dense planting", "Ensure proper plant spacing", "Balanced fertilization", "Remove volunteer wheat plants"],
+      "season": "Rabi (January-February, dry mild weather)",
+      "government_scheme": "Subsidized fungicides available through Karnataka Agricultural Department"
+    },
+    {
+      "id": "wilt_cotton",
+      "name": "Fusarium Wilt",
+      "crops": ["Cotton", "Tomato", "Chilli"],
+      "symptoms": ["lower leaves yellowing and wilting", "vascular discoloration (brown streaks in stem)", "plant death starting from one side", "stunting of affected plants"],
+      "cause": "Fusarium oxysporum f. sp. vasinfectum (Soil-borne fungus)",
+      "severity": "high",
+      "treatments": [
+        {"name": "Carbendazim", "dosage": "2g per liter soil drench", "cost": "~Rs 250/kg", "frequency": "Drench at transplanting"},
+        {"name": "Trichoderma viride", "dosage": "4g per liter", "cost": "~Rs 100/kg", "frequency": "Soil application at sowing"},
+        {"name": "Pseudomonas fluorescens", "dosage": "5g per liter", "cost": "~Rs 80/kg", "frequency": "Soil drench and foliar spray"}
+      ],
+      "prevention": ["Use resistant varieties (RS-2007, Suraj)", "Treat seed with Trichoderma", "Practice 3-year crop rotation", "Improve soil drainage", "Add organic manure to improve soil health"],
+      "season": "Kharif (monsoon, persists in soil year-round)",
+      "government_scheme": "Bio-control agents subsidized through Integrated Pest Management (IPM) program"
+    },
+    {
+      "id": "bollworm_cotton",
+      "name": "Pink Bollworm",
+      "crops": ["Cotton"],
+      "symptoms": ["flowers and buds turning pink and dropping", "holes in cotton bolls", "larvae inside bolls feeding on seeds", "stained and damaged lint"],
+      "cause": "Pectinophora gossypiella (Lepidoptera insect)",
+      "severity": "high",
+      "treatments": [
+        {"name": "Emamectin Benzoate", "dosage": "0.4g per liter", "cost": "~Rs 800/kg", "frequency": "Spray at flower bud stage"},
+        {"name": "Chlorantraniliprole", "dosage": "0.3ml per liter", "cost": "~Rs 1200/liter", "frequency": "Spray at boll formation"},
+        {"name": "Lambda Cyhalothrin", "dosage": "0.5ml per liter", "cost": "~Rs 500/liter", "frequency": "Spray at pest appearance"}
+      ],
+      "prevention": ["Destroy fallen flowers and damaged bolls", "Install pheromone traps (5 per acre)", "Use Bt cotton varieties", "Early planting to avoid peak pest season", "Intercrop with non-host crops"],
+      "season": "Kharif (August-December, peak during boll formation)",
+      "government_scheme": "Bt cotton seeds available under subsidized rates through NABARD"
+    },
+    {
+      "id": "aphid_cotton",
+      "name": "Cotton Aphid",
+      "crops": ["Cotton", "Okra"],
+      "symptoms": ["curled and yellowing leaves", "sticky honeydew on leaf surface", "sooty mold growth on honeydew", "stunted plant growth", "ant activity on plants"],
+      "cause": "Aphis gossypii (Sucking pest)",
+      "severity": "medium",
+      "treatments": [
+        {"name": "Imidacloprid", "dosage": "0.5ml per liter", "cost": "~Rs 350/liter", "frequency": "Foliar spray at infestation"},
+        {"name": "Thiamethoxam", "dosage": "0.3g per liter", "cost": "~Rs 400/kg", "frequency": "Soil drench or foliar spray"},
+        {"name": "Neem Oil", "dosage": "5ml per liter", "cost": "~Rs 200/liter", "frequency": "Spray weekly for 3 weeks"}
+      ],
+      "prevention": ["Encourage natural predators (ladybugs, lacewings)", "Avoid excess nitrogen fertilizer", "Remove weeds that harbor aphids", "Use yellow sticky traps", "Intercrop with marigold"],
+      "season": "Year-round, peak in cool dry months",
+      "government_scheme": "Bio-pesticides subsidized through State Bio-Control Lab"
+    },
+    {
+      "id": "downy_mildew_grape",
+      "name": "Downy Mildew",
+      "crops": ["Grape", "Onion"],
+      "symptoms": ["yellow translucent spots on upper leaf surface", "white fuzzy growth on leaf underside", "leaf curling and drying", "reduced fruit quality and yield"],
+      "cause": "Plasmopara viticola (Oomycete pathogen)",
+      "severity": "high",
+      "treatments": [
+        {"name": "Metalaxyl + Mancozeb", "dosage": "2.5g per liter", "cost": "~Rs 400/kg", "frequency": "Spray every 10-14 days"},
+        {"name": "Fosetyl Aluminum", "dosage": "3g per liter", "cost": "~Rs 500/kg", "frequency": "Spray at early infection"},
+        {"name": "Copper Oxychloride", "dosage": "3g per liter", "cost": "~Rs 250/kg", "frequency": "Preventive spray during monsoon"}
+      ],
+      "prevention": ["Prune canopy for good air circulation", "Remove infected leaves promptly", "Avoid overhead irrigation", "Use resistant rootstocks", "Apply preventive sprays before monsoon"],
+      "season": "Monsoon (July-September, high humidity period)",
+      "government_scheme": "Drip irrigation subsidy available (70-90%) through Karnataka Horticulture Department"
+    },
+    {
+      "id": "anthracnose_mango",
+      "name": "Anthracnose",
+      "crops": ["Mango", "Banana"],
+      "symptoms": ["dark sunken lesions on leaves", "spots on fruits causing cracking", "flower blight and die-back", "gum exudation from affected branches"],
+      "cause": "Colletotrichum gloeosporioides (Fungal pathogen)",
+      "severity": "medium",
+      "treatments": [
+        {"name": "Carbendazim", "dosage": "1g per liter", "cost": "~Rs 250/kg", "frequency": "Spray at flowering and fruit set"},
+        {"name": "Mancozeb", "dosage": "2.5g per liter", "cost": "~Rs 200/kg", "frequency": "Spray at pre-bloom and post-harvest"},
+        {"name": "Copper Hydroxide", "dosage": "3g per liter", "cost": "~Rs 300/kg", "frequency": "Pruning season spray"}
+      ],
+      "prevention": ["Prune dead and infected branches", "Improve orchard ventilation", "Remove fallen leaves and fruit", "Avoid overhead irrigation", "Harvest at proper maturity"],
+      "season": "Pre-monsoon and monsoon (March-September)",
+      "government_scheme": "Mango orchard development supported under Mission for Integrated Development of Horticulture (MIDH)"
+    },
+    {
+      "id": "fusarium_wilt_banana",
+      "name": "Fusarium Wilt (Panama Disease)",
+      "crops": ["Banana"],
+      "symptoms": ["lower leaves turning yellow and wilting", "V-shaped yellow streak on leaf margin", "vascular discoloration in pseudostem", "plant collapse and death"],
+      "cause": "Fusarium oxysporum f. sp. cubense (Soil-borne fungus)",
+      "severity": "high",
+      "treatments": [
+        {"name": "Trichoderma viride", "dosage": "4g per liter soil drench", "cost": "~Rs 100/kg", "frequency": "Apply at planting and 3 months"},
+        {"name": "Carbendazim", "dosage": "2g per liter", "cost": "~Rs 250/kg", "frequency": "Soil drench at symptom appearance"},
+        {"name": "Pseudomonas fluorescens", "dosage": "5g per liter", "cost": "~Rs 80/kg", "frequency": "Soil application quarterly"}
+      ],
+      "prevention": ["Use tissue-culture resistant varieties (Grand Naine, Baulagold)", "Practice crop rotation (3-4 years)", "Improve soil drainage", "Drench planting pits with Trichoderma", "Avoid waterlogging"],
+      "season": "Year-round (soil-borne, persists for decades)",
+      "government_scheme": "Tissue culture banana plants subsidized at 50% through Karnataka State Horticulture Board"
+    },
+    {
+      "id": "black_spot_rose",
+      "name": "Black Spot",
+      "crops": ["Rose"],
+      "symptoms": ["black circular spots on upper leaf surface", "yellow halos around spots", "premature leaf drop", "weakened plant and reduced flowering"],
+      "cause": "Diplocarpon rosae (Fungal pathogen)",
+      "severity": "medium",
+      "treatments": [
+        {"name": "Mancozeb", "dosage": "2.5g per liter", "cost": "~Rs 200/kg", "frequency": "Spray every 14 days"},
+        {"name": "Carbendazim", "dosage": "1g per liter", "cost": "~Rs 250/kg", "frequency": "Spray at disease onset"},
+        {"name": "Tebuconazole", "dosage": "0.5ml per liter", "cost": "~Rs 500/liter", "frequency": "Spray during humid weather"}
+      ],
+      "prevention": ["Use resistant varieties", "Remove fallen leaves", "Prune for air circulation", "Avoid overhead watering", "Mulch around base of plant"],
+      "season": "Monsoon and post-monsoon (high humidity)",
+      "government_scheme": "Floriculture subsidies available under MIDH for protected cultivation"
+    },
+    {
+      "id": "rust_sugarcane",
+      "name": "Red Rust",
+      "crops": ["Sugarcane"],
+      "symptoms": ["reddish-brown pustules on leaves", "elongated orange-brown spots", "leaf drying from tips", "reduced sugar content"],
+      "cause": "Puccinia melanocephala (Rust fungus)",
+      "severity": "medium",
+      "treatments": [
+        {"name": "Mancozeb", "dosage": "2.5g per liter", "cost": "~Rs 200/kg", "frequency": "Spray at first symptom"},
+        {"name": "Propiconazole", "dosage": "1ml per liter", "cost": "~Rs 400/liter", "frequency": "Foliar spray at booting stage"},
+        {"name": "Sulfur Dust", "dosage": "25kg per hectare", "cost": "~Rs 60/kg", "frequency": "Dust during early infection"}
+      ],
+      "prevention": ["Use rust-resistant varieties (Co-86032, Co-99004)", "Maintain proper crop spacing", "Avoid excess nitrogen", "Remove alternate hosts", "Timely harvesting"],
+      "season": "Kharif (August-November, humid weather)",
+      "government_scheme": "Sugarcane种植补贴 available through Karnataka State Sugarcane Directorate"
+    },
+    {
+      "id": "root_rot_groundnut",
+      "name": "Collar Rot / Root Rot",
+      "crops": ["Groundnut", "Chilli"],
+      "symptoms": ["wilting of seedlings near soil level", "brown lesions at stem base", "roots turning brown and rotting", "plant death in patches"],
+      "cause": "Rhizoctonia solani (Soil-borne fungus)",
+      "severity": "high",
+      "treatments": [
+        {"name": "Trichoderma viride", "dosage": "4g per kg seed treatment", "cost": "~Rs 100/kg", "frequency": "Seed treatment before sowing"},
+        {"name": "Metalaxyl + Mancozeb", "dosage": "2.5g per liter soil drench", "cost": "~Rs 400/kg", "frequency": "Apply at sowing"},
+        {"name": "Carbendazim", "dosage": "2g per liter", "cost": "~Rs 250/kg", "frequency": "Soil drench at symptom appearance"}
+      ],
+      "prevention": ["Treat seed with Trichoderma before sowing", "Rotate crops (groundnut-wheat-paddy)", "Ensure proper drainage", "Avoid waterlogging", "Use raised beds in heavy soils"],
+      "season": "Kharif (monsoon, waterlogged conditions)",
+      "government_scheme": "Seed treatment chemicals free through KVK for small farmers"
+    },
+    {
+      "id": "leaf_curl_virus_tomato",
+      "name": "Tomato Leaf Curl Virus (ToLCV)",
+      "crops": ["Tomato", "Chilli", "Brinjal"],
+      "symptoms": ["upward curling of leaves", "stunted plant growth", "yellowing of leaf margins", "reduced fruit set and size"],
+      "cause": "Tomato Leaf Curl Virus (Transmitted by whitefly Bemisia tabaci)",
+      "severity": "high",
+      "treatments": [
+        {"name": "Imidacloprid", "dosage": "0.5ml per liter", "cost": "~Rs 350/liter", "frequency": "Spray to control whitefly vector"},
+        {"name": "Thiamethoxam", "dosage": "0.3g per liter", "cost": "~Rs 400/kg", "frequency": "Foliar spray at vector appearance"},
+        {"name": "Neem Oil", "dosage": "5ml per liter", "cost": "~Rs 200/liter", "frequency": "Spray weekly for vector control"}
+      ],
+      "prevention": ["Use resistant varieties (Arka Rakshak, Akash)", "Install yellow sticky traps for whitefly", "Remove infected plants immediately", "Use reflective mulch (silver polythene)", "Intercrop with maize as barrier"],
+      "season": "Year-round (peak during dry warm months)",
+      "government_scheme": "Resistant varieties subsidized through Karnataka State Seed Committee"
+    },
+    {
+      "id": "damping_off_chilli",
+      "name": "Damping Off",
+      "crops": ["Chilli", "Tomato", "Brinjal"],
+      "symptoms": ["seedlings falling over at soil level", "water-soaked stem at base", "seedling death in nursery beds", "pre and post emergence damping"],
+      "cause": "Pythium aphanidermatum and Rhizoctonia solani (Soil-borne fungi)",
+      "severity": "high",
+      "treatments": [
+        {"name": "Trichoderma viride", "dosage": "4g per liter seed soak", "cost": "~Rs 100/kg", "frequency": "Seed treatment 24 hours before sowing"},
+        {"name": "Metalaxyl", "dosage": "2g per liter soil drench", "cost": "~Rs 500/kg", "frequency": "Apply to nursery beds before sowing"},
+        {"name": "Captan", "dosage": "3g per kg seed", "cost": "~Rs 300/kg", "frequency": "Seed coating before sowing"}
+      ],
+      "prevention": ["Ensure well-drained nursery beds", "Avoid overwatering", "Use sterilized potting mix", "Maintain proper seedling spacing", "Drench nursery with Trichoderma before sowing"],
+      "season": "Pre-monsoon (June-July, nursery stage)",
+      "government_scheme": "Seed treatment kits available free at KVK centers"
+    },
+    {
+      "id": "leaf_blight_onion",
+      "name": "Leaf Blight (Alternaria Leaf Spot)",
+      "crops": ["Onion", "Garlic"],
+      "symptoms": ["elongated tan spots on leaves", "leaf tip die-back", "concentric rings in lesions", "premature leaf drying"],
+      "cause": "Alternaria cepae (Fungal pathogen)",
+      "severity": "medium",
+      "treatments": [
+        {"name": "Mancozeb", "dosage": "2.5g per liter", "cost": "~Rs 200/kg", "frequency": "Spray every 10 days"},
+        {"name": "Chlorothalonil", "dosage": "2ml per liter", "cost": "~Rs 350/liter", "frequency": "Spray at disease onset"},
+        {"name": "Copper Oxychloride", "dosage": "3g per liter", "cost": "~Rs 250/kg", "frequency": "Preventive spray during humid weather"}
+      ],
+      "prevention": ["Use healthy sets for planting", "Rotate with non-allium crops (3 years)", "Remove infected debris after harvest", "Avoid overhead irrigation", "Use mulch to reduce soil splash"],
+      "season": "Rabi (November-February, cool humid conditions)",
+      "government_scheme": "Onion storage facilities subsidized under National Horticulture Mission"
+    },
+    {
+      "id": "fruit_borer_brinjal",
+      "name": "Fruit and Shoot Borer",
+      "crops": ["Brinjal", "Chilli"],
+      "symptoms": ["holes in fruits with larval frass", "shoots wilting and dying", "early fruit drop", "tunnels inside fruit and stem"],
+      "cause": "Leucinodes orbonalis (Lepidoptera insect)",
+      "severity": "high",
+      "treatments": [
+        {"name": "Emamectin Benzoate", "dosage": "0.4g per liter", "cost": "~Rs 800/kg", "frequency": "Spray at flower bud and fruit set stage"},
+        {"name": "Chlorantraniliprole", "dosage": "0.3ml per liter", "cost": "~Rs 1200/liter", "frequency": "Spray at boll formation"},
+        {"name": "Bacillus thuringiensis (Bt)", "dosage": "2g per liter", "cost": "~Rs 150/kg", "frequency": "Spray at early larval stage"}
+      ],
+      "prevention": ["Install pheromone traps (5 per acre)", "Collect and destroy infected fruits", "Use light traps", "Intercrop with maize", "Practice crop rotation"],
+      "season": "Year-round (peak during warm humid months)",
+      "government_scheme": "IPM packages with subsidized bio-pesticides available through Karnataka Agriculture Department"
+    },
+    {
+      "id": "citrus_canker",
+      "name": "Citrus Canker",
+      "crops": ["Lemon", "Orange", "Sweet Lime (Mosambi)"],
+      "symptoms": ["raised corky lesions on leaves", "circular spots with yellow halo", "fruit lesions causing cracking", "defoliation and twig die-back"],
+      "cause": "Xanthomonas citri pv. citri (Bacterium)",
+      "severity": "high",
+      "treatments": [
+        {"name": "Copper Hydroxide", "dosage": "3g per liter", "cost": "~Rs 300/kg", "frequency": "Spray at new flush stage"},
+        {"name": "Streptocycline", "dosage": "500ppm solution", "cost": "~Rs 150/vial", "frequency": "Foliar spray at disease onset"},
+        {"name": "Bordeaux Mixture", "dosage": "1% solution", "cost": "~Rs 100/kg", "frequency": "Preventive spray before monsoon"}
+      ],
+      "prevention": ["Use disease-free nursery plants", "Prune and burn infected branches", "Windbreaks to reduce rain splash", "Disinfect tools between trees", "Remove thorny wild citrus hosts"],
+      "season": "Monsoon (June-September, rain splash spreads bacteria)",
+      "government_scheme": "Citrus orchard establishment subsidized under MIDH (50-75%)"
+    },
+    {
+      "id": "wilt_pigeonpea",
+      "name": "Wilt",
+      "crops": ["Pigeonpea (Tur Dal)", "Chickpea"],
+      "symptoms": ["wilting of entire plant", "brown discoloration of vascular tissue", "stem base turning dark brown", "plant death during flowering"],
+      "cause": "Fusarium udum (Soil-borne fungus)",
+      "severity": "high",
+      "treatments": [
+        {"name": "Trichoderma viride", "dosage": "4g per kg seed", "cost": "~Rs 100/kg", "frequency": "Seed treatment before sowing"},
+        {"name": "Carbendazim", "dosage": "2g per liter soil drench", "cost": "~Rs 250/kg", "frequency": "Apply at sowing and flowering"},
+        {"name": "Pseudomonas fluorescens", "dosage": "5g per liter", "cost": "~Rs 80/kg", "frequency": "Seed coating + soil application"}
+      ],
+      "prevention": ["Use resistant varieties (ICPH-2671, BSMR-736)", "Long crop rotation (3-4 years)", "Deep plowing in summer", "Seed treatment with bio-agents", "Avoid waterlogged fields"],
+      "season": "Kharif (monsoon, July-September)",
+      "government_scheme": "Pulse seeds available at subsidized rates under National Food Security Mission"
+    },
+    {
+      "id": "rust_soybean",
+      "name": "Soybean Rust",
+      "crops": ["Soybean"],
+      "symptoms": ["tan to brown pustules on leaf underside", "chlorotic spots on upper leaf surface", "premature defoliation", "reduced seed filling"],
+      "cause": "Phakopsora pachyrhizi (Rust fungus)",
+      "severity": "high",
+      "treatments": [
+        {"name": "Tebuconazole", "dosage": "0.5ml per liter", "cost": "~Rs 500/liter", "frequency": "Spray at early infection"},
+        {"name": "Propiconazole", "dosage": "1ml per liter", "cost": "~Rs 400/liter", "frequency": "Spray every 14 days"},
+        {"name": "Mancozeb", "dosage": "2.5g per liter", "cost": "~Rs 200/kg", "frequency": "Preventive spray during humid weather"}
+      ],
+      "prevention": ["Use resistant varieties (JS-9560, JS-335)", "Early sowing to avoid peak disease", "Maintain proper plant spacing", "Remove crop debris after harvest", "Use certified seeds"],
+      "season": "Kharif (August-October, post-monsoon humidity)",
+      "government_scheme": "Soybean seeds subsidized through Oilseed Development Program"
+    },
+    {
+      "id": "bacterial_wilt_beans",
+      "name": "Bacterial Wilt",
+      "crops": ["French Bean", "Common Bean"],
+      "symptoms": ["rapid wilting of leaves", "water-soaked stem lesions", "bacterial ooze from cut stem", "plant death within days"],
+      "cause": "Ralstonia solanacearum (Soil-borne bacterium)",
+      "severity": "high",
+      "treatments": [
+        {"name": "Streptocycline", "dosage": "500ppm soil drench", "cost": "~Rs 150/vial", "frequency": "Apply at sowing"},
+        {"name": "Pseudomonas fluorescens", "dosage": "5g per liter", "cost": "~Rs 80/kg", "frequency": "Soil application and seed treatment"},
+        {"name": "Trichoderma harzianum", "dosage": "4g per liter", "cost": "~Rs 100/kg", "frequency": "Soil application at sowing"}
+      ],
+      "prevention": ["Use resistant varieties", "Raise seedlings on raised beds", "Improve soil drainage", "Avoid waterlogged conditions", "Crop rotation for 3 years"],
+      "season": "Kharif (monsoon, warm and wet conditions)",
+      "government_scheme": "Bio-control agents subsidized through IPM program"
+    },
+    {
+      "id": "sooty_mold_citrus",
+      "name": "Sooty Mold",
+      "crops": ["Citrus", "Mango", "Coconut"],
+      "symptoms": ["black sooty coating on leaves", "reduced photosynthesis", "ant activity on plants", "honeydew on leaf surface"],
+      "cause": "Capnodium citri (Fungus growing on honeydew excreted by sap-sucking insects)",
+      "severity": "low",
+      "treatments": [
+        {"name": "Imidacloprid", "dosage": "0.5ml per liter", "cost": "~Rs 350/liter", "frequency": "Spray to kill aphids/scale causing honeydew"},
+        {"name": "Neem Oil", "dosage": "5ml per liter", "cost": "~Rs 200/liter", "frequency": "Spray to control sap-sucking insects"},
+        {"name": "Water Spray", "dosage": "High pressure wash", "cost": "Free", "frequency": "Wash off mold with water jet"}
+      ],
+      "prevention": ["Control sap-sucking insects (aphids, scale, whitefly)", "Encourage natural predators", "Regular monitoring for pest infestation", "Prune for better air circulation", "Remove ant trails (ants protect aphids)"],
+      "season": "Year-round (follows sap-sucking insect population)",
+      "government_scheme": "IPM programs through Karnataka Agriculture Department provide bio-control agents"
+    },
+    {
+      "id": "dieback_mango",
+      "name": "Die-back",
+      "crops": ["Mango", "Citrus"],
+      "symptoms": ["branches drying from tips downward", "dark brown cankers on twigs", "gum exudation from affected branches", "reduced flowering on affected branches"],
+      "cause": "Botryodiplodia theobromae (Fungal pathogen)",
+      "severity": "medium",
+      "treatments": [
+        {"name": "Copper Oxychloride", "dosage": "3g per liter", "cost": "~Rs 250/kg", "frequency": "Spray during pruning season"},
+        {"name": "Carbendazim", "dosage": "1g per liter", "cost": "~Rs 250/kg", "frequency": "Spray at pruning cuts"},
+        {"name": "Bordeaux Mixture", "dosage": "1% solution", "cost": "~Rs 100/kg", "frequency": "Apply on pruning wounds"}
+      ],
+      "prevention": ["Prune dead and infected branches", "Apply fungicide on pruning cuts", "Improve tree nutrition", "Maintain orchard hygiene", "Avoid mechanical injuries to branches"],
+      "season": "Post-monsoon and dry season (October-May)",
+      "government_scheme": "Mango garden rejuvenation supported under MIDH"
+    },
+    {
+      "id": "red_rot_sugarcane",
+      "name": "Red Rot",
+      "crops": ["Sugarcane"],
+      "symptoms": ["reddish internal discoloration of stalk", "fermented smell from affected stalk", "drying of leaves", "stalk cracking and oozing"],
+      "cause": "Colletotrichum falcatum (Fungal pathogen)",
+      "severity": "high",
+      "treatments": [
+        {"name": "Carbendazim", "dosage": "2g per liter sett treatment", "cost": "~Rs 250/kg", "frequency": "Treat setts before planting"},
+        {"name": "Bordeaux Mixture", "dosage": "2% solution", "cost": "~Rs 100/kg", "frequency": "Dip setts before planting"},
+        {"name": "Trichoderma viride", "dosage": "4g per liter", "cost": "~Rs 100/kg", "frequency": "Sett treatment with bio-agent"}
+      ],
+      "prevention": ["Use disease-free setts", "Treat setts with fungicide before planting", "Select resistant varieties (Co-86032, Co-99004)", "Remove and burn infected stubble", "Balanced fertilization"],
+      "season": "Planting season (February-March), symptoms appear during growth",
+      "government_scheme": "Sugarcane development programs through Karnataka State Sugarcane Directorate"
+    },
+    {
+      "id": "blight_maize",
+      "name": "Turcicum Leaf Blight",
+      "crops": ["Maize (Corn)"],
+      "symptoms": ["elongated grayish-green lesions on leaves", "tan to brown spindle-shaped spots", "large necrotic areas under humid conditions", "reduced ear filling"],
+      "cause": "Exserohilum turcicum (Fungal pathogen)",
+      "severity": "medium",
+      "treatments": [
+        {"name": "Mancozeb", "dosage": "2.5g per liter", "cost": "~Rs 200/kg", "frequency": "Spray at tasseling stage"},
+        {"name": "Carbendazim", "dosage": "1g per liter", "cost": "~Rs 250/kg", "frequency": "Spray at disease onset"},
+        {"name": "Tricyclazole", "dosage": "0.6g per liter", "cost": "~Rs 450/kg", "frequency": "Foliar spray at booting"}
+      ],
+      "prevention": ["Use resistant hybrids (HQPM-1, PMH-1)", "Balanced nitrogen application", "Proper plant spacing", "Crop rotation with non-cereal crops", "Remove crop debris after harvest"],
+      "season": "Kharif (August-October, humid post-monsoon)",
+      "government_scheme": "Hybrid maize seeds subsidized under National Food Security Mission"
+    },
+    {
+      "id": "wilt_lentil",
+      "name": "Wilt",
+      "crops": ["Lentil (Masoor)", "Pea"],
+      "symptoms": ["wilting of lower leaves first", "brown vascular discoloration", "plant stunting and death", "root rot and decay"],
+      "cause": "Fusarium oxysporum f. sp. lentis (Soil-borne fungus)",
+      "severity": "high",
+      "treatments": [
+        {"name": "Trichoderma viride", "dosage": "4g per kg seed", "cost": "~Rs 100/kg", "frequency": "Seed treatment before sowing"},
+        {"name": "Carbendazim", "dosage": "2g per liter", "cost": "~Rs 250/kg", "frequency": "Seed soak treatment"},
+        {"name": "Pseudomonas fluorescens", "dosage": "10g per kg seed", "cost": "~Rs 80/kg", "frequency": "Seed coating"}
+      ],
+      "prevention": ["Use resistant varieties", "Treat seed with bio-agents", "Deep summer plowing", "Crop rotation for 3-4 years", "Improve soil drainage"],
+      "season": "Rabi (November-February)",
+      "government_scheme": "Pulse seeds subsidized under National Food Security Mission"
+    },
+    {
+      "id": "mango_malformation",
+      "name": "Malformation",
+      "crops": ["Mango"],
+      "symptoms": ["bunchy rosette of leaves", "thickened and distorted shoots", " malformed flowers and fruit clusters", "reduced fruit set"],
+      "cause": "Fusarium moniliforme var. subglutinans (Fungal pathogen) + physiological disorder",
+      "severity": "medium",
+      "treatments": [
+        {"name": "Carbendazim", "dosage": "1g per liter", "cost": "~Rs 250/kg", "frequency": "Spray at pre-bloom stage"},
+        {"name": "NAA (Naphthalene Acetic Acid)", "dosage": "100ppm", "cost": "~Rs 200/kg", "frequency": "Spray at panicle emergence"},
+        {"name": "Ethrel", "dosage": "500ppm", "cost": "~Rs 150/liter", "frequency": "Spray on affected shoots"}
+      ],
+      "prevention": ["Prune malformed branches", "Maintain tree vigor with balanced fertilization", "Remove affected panicles early", "Avoid excess nitrogen", "Ensure adequate micronutrients"],
+      "season": "Pre-flowering (January-February)",
+      "government_scheme": "Mango orchard management supported under MIDH"
+    },
+    {
+      "id": "pod_borer_chickpea",
+      "name": "Gram Pod Borer",
+      "crops": ["Chickpea (Chana)", "Pigeonpea"],
+      "symptoms": ["holes in pods with larvae inside", "flowers and young pods eaten", "frass and webbing on plant", "reduced grain filling"],
+      "cause": "Helicoverpa armigera (Lepidoptera insect)",
+      "severity": "high",
+      "treatments": [
+        {"name": "Emamectin Benzoate", "dosage": "0.4g per liter", "cost": "~Rs 800/kg", "frequency": "Spray at pod formation"},
+        {"name": "Chlorantraniliprole", "dosage": "0.3ml per liter", "cost": "~Rs 1200/liter", "frequency": "Spray at flower bud stage"},
+        {"name": "Bacillus thuringiensis (Bt)", "dosage": "2g per liter", "cost": "~Rs 150/kg", "frequency": "Spray at early larval stage"}
+      ],
+      "prevention": ["Install pheromone traps (5 per acre)", "Intercrop with sorghum as trap crop", "Use Trichogramma egg parasitoids", "Early sowing to avoid peak pest", "Collect and destroy larvae manually"],
+      "season": "Rabi (January-February, pod formation stage)",
+      "government_scheme": "IPM packages with subsidized bio-pesticides through Agriculture Department"
+    },
+    {
+      "id": "nematode_root_knot",
+      "name": "Root Knot Nematode",
+      "crops": ["Tomato", "Okra", "Brinjal", "Groundnut"],
+      "symptoms": ["galls and knots on roots", "stunted plant growth", "wilting during hot hours", "yellowing and decline of plants"],
+      "cause": "Meloidogyne incognita (Root-knot nematode)",
+      "severity": "high",
+      "treatments": [
+        {"name": "Carbofuran (Furadan)", "dosage": "2kg per hectare soil application", "cost": "~Rs 300/kg", "frequency": "Apply at sowing in furrows"},
+        {"name": "Pseudomonas fluorescens", "dosage": "5g per liter soil drench", "cost": "~Rs 80/kg", "frequency": "Apply at transplanting"},
+        {"name": "Trichoderma harzianum", "dosage": "4g per liter", "cost": "~Rs 100/kg", "frequency": "Soil application at sowing"}
+      ],
+      "prevention": ["Crop rotation with non-host crops (2-3 years)", "Solarize soil with polythene mulch", "Add neem cake to soil (250kg/ha)", "Use resistant rootstocks", "Deep summer plowing to expose nematodes"],
+      "season": "Year-round (soil-borne, persistent)",
+      "government_scheme": "Bio-control agents subsidized through IPM program"
+    },
+    {
+      "id": "black_rot_cabbage",
+      "name": "Black Rot",
+      "crops": ["Cabbage", "Cauliflower", "Mustard"],
+      "symptoms": ["V-shaped yellow lesions on leaf edges", "blackened leaf veins", "wilting of outer leaves", "bacterial ooze from cut stems"],
+      "cause": "Xanthomonas campestris pv. campestris (Bacterium)",
+      "severity": "medium",
+      "treatments": [
+        {"name": "Copper Hydroxide", "dosage": "3g per liter", "cost": "~Rs 300/kg", "frequency": "Spray at first symptom"},
+        {"name": "Streptocycline", "dosage": "500ppm solution", "cost": "~Rs 150/vial", "frequency": "Foliar spray every 10 days"},
+        {"name": "Bordeaux Mixture", "dosage": "1% solution", "cost": "~Rs 100/kg", "frequency": "Preventive spray"}
+      ],
+      "prevention": ["Use certified disease-free seeds", "Treat seed in hot water (50C for 20 min)", "Rotate with non-cruciferous crops", "Remove crop debris after harvest", "Avoid overhead irrigation"],
+      "season": "Rabi (November-February, cool wet conditions)",
+      "government_scheme": "Vegetable seeds subsidized under National Horticulture Mission"
+    },
+    {
+      "id": "angular_leaf_spot_cotton",
+      "name": "Angular Leaf Spot (Cercospora Leaf Spot)",
+      "crops": ["Cotton"],
+      "symptoms": ["angular dark spots on leaves", "spots limited by leaf veins", "leaf yellowing and dropping", "reduced photosynthesis"],
+      "cause": "Cercospora gossypina (Fungal pathogen)",
+      "severity": "low",
+      "treatments": [
+        {"name": "Mancozeb", "dosage": "2.5g per liter", "cost": "~Rs 200/kg", "frequency": "Spray at disease onset"},
+        {"name": "Copper Oxychloride", "dosage": "3g per liter", "cost": "~Rs 250/kg", "frequency": "Foliar spray"},
+        {"name": "Carbendazim", "dosage": "1g per liter", "cost": "~Rs 250/kg", "frequency": "Spray at early infection"}
+      ],
+      "prevention": ["Remove infected leaves", "Maintain plant nutrition", "Ensure proper spacing", "Avoid overhead irrigation", "Use certified seeds"],
+      "season": "Kharif (monsoon, humid conditions)",
+      "government_scheme": "Cotton development programs through CCI and Cotton Corporation of India"
+    },
+    {
+      "id": "wilt_papaya",
+      "name": "Fusarium Wilt",
+      "crops": ["Papaya"],
+      "symptoms": ["yellowing of lower leaves", "wilting starting from one side", "vascular browning in trunk", "plant death"],
+      "cause": "Fusarium oxysporum f. sp. carici (Soil-borne fungus)",
+      "severity": "high",
+      "treatments": [
+        {"name": "Trichoderma viride", "dosage": "4g per liter soil drench", "cost": "~Rs 100/kg", "frequency": "Apply at planting and quarterly"},
+        {"name": "Carbendazim", "dosage": "2g per liter", "cost": "~Rs 250/kg", "frequency": "Soil drench at symptom appearance"},
+        {"name": "Pseudomonas fluorescens", "dosage": "5g per liter", "cost": "~Rs 80/kg", "frequency": "Soil drench every 3 months"}
+      ],
+      "prevention": ["Use raised beds for planting", "Improve soil drainage", "Treat planting pit with Trichoderma", "Avoid waterlogging", "Remove and destroy infected plants"],
+      "season": "Year-round (soil-borne, worse during wet conditions)",
+      "government_scheme": "Papaya cultivation supported under MIDH with 50% subsidy"
+    },
+    {
+      "id": "cercospora_leaf_spot_sugarbeet",
+      "name": "Cercospora Leaf Spot",
+      "crops": ["Sugarbeet"],
+      "symptoms": ["small circular spots with gray centers", "reddish-purple borders on spots", "spots merging into large blighted areas", "premature leaf death"],
+      "cause": "Cercospora beticola (Fungal pathogen)",
+      "severity": "medium",
+      "treatments": [
+        {"name": "Mancozeb", "dosage": "2.5g per liter", "cost": "~Rs 200/kg", "frequency": "Spray every 10-14 days"},
+        {"name": "Chlorothalonil", "dosage": "2ml per liter", "cost": "~Rs 350/liter", "frequency": "Spray at disease onset"},
+        {"name": "Tebuconazole", "dosage": "0.5ml per liter", "cost": "~Rs 500/liter", "frequency": "Foliar spray at early infection"}
+      ],
+      "prevention": ["Use resistant varieties", "Rotate crops for 3 years", "Remove and destroy crop debris", "Avoid overhead irrigation", "Maintain balanced fertilization"],
+      "season": "Rabi (cool humid conditions)",
+      "government_scheme": "Sugar industry subsidies through Karnataka State Sugar Directorate"
+    },
+    {
+      "id": "fusarium_corm_rot_turmeric",
+      "name": "Corm Rot",
+      "crops": ["Turmeric", "Ginger"],
+      "symptoms": ["rotting of underground corms", "yellowing of leaves", "plant wilting and drying", "soft smelly corm tissue"],
+      "cause": "Fusarium solani (Soil-borne fungus)",
+      "severity": "high",
+      "treatments": [
+        {"name": "Trichoderma viride", "dosage": "4g per liter corm treatment", "cost": "~Rs 100/kg", "frequency": "Treat corms before planting"},
+        {"name": "Carbendazim", "dosage": "2g per liter", "cost": "~Rs 250/kg", "frequency": "Corm dip before planting"},
+        {"name": "Metalaxyl + Mancozeb", "dosage": "2.5g per liter soil drench", "cost": "~Rs 400/kg", "frequency": "Apply at planting"}
+      ],
+      "prevention": ["Treat corms with fungicide before planting", "Use well-drained fields", "Avoid waterlogging", "Crop rotation for 2-3 years", "Add lime to acidic soils"],
+      "season": "Planting season (May-June), rot during monsoon",
+      "government_scheme": "Spice crops supported under National Horticulture Mission with 50% subsidy"
+    },
+    {
+      "id": "leaf_spot_rubber",
+      "name": "Coryneum Leaf Spot",
+      "crops": ["Rubber"],
+      "symptoms": ["circular brown spots on leaves", "spots with gray centers", "premature defoliation", "reduced latex yield"],
+      "cause": "Coryneum microsporum (Fungal pathogen)",
+      "severity": "low",
+      "treatments": [
+        {"name": "Mancozeb", "dosage": "2.5g per liter", "cost": "~Rs 200/kg", "frequency": "Spray during leaf fall season"},
+        {"name": "Copper Oxychloride", "dosage": "3g per liter", "cost": "~Rs 250/kg", "frequency": "Preventive spray at flush stage"},
+        {"name": "Carbendazim", "dosage": "1g per liter", "cost": "~Rs 250/kg", "frequency": "Spray at disease onset"}
+      ],
+      "prevention": ["Maintain proper nutrition", "Ensure adequate shade", "Remove fallen leaves", "Avoid overcrowding", "Balanced fertilization with potassium"],
+      "season": "Monsoon (June-September, wet weather)",
+      "government_scheme": "Rubber plantation supported through Rubber Board of India"
+    },
+    {
+      "id": "diamond_back_moth_cabbage",
+      "name": "Diamond Back Moth",
+      "crops": ["Cabbage", "Cauliflower", "Brinjal"],
+      "symptoms": ["holes chewed in leaves", "skeletonized leaves", "larvae feeding on leaf undersides", "webbing and frass on plants"],
+      "cause": "Plutella xylostella (Lepidoptera insect)",
+      "severity": "high",
+      "treatments": [
+        {"name": "Emamectin Benzoate", "dosage": "0.4g per liter", "cost": "~Rs 800/kg", "frequency": "Spray at early larval stage"},
+        {"name": "Bacillus thuringiensis (Bt)", "dosage": "2g per liter", "cost": "~Rs 150/kg", "frequency": "Spray at small larva stage"},
+        {"name": "Spinosad", "dosage": "0.5ml per liter", "cost": "~Rs 700/liter", "frequency": "Spray at pest appearance"}
+      ],
+      "prevention": ["Use netting/cloth barriers", "Intercrop with aromatic herbs (basil, mint)", "Install pheromone traps", "Encourage parasitic wasps", "Avoid excessive nitrogen"],
+      "season": "Year-round (peak during cool dry months)",
+      "government_scheme": "Bio-pesticides subsidized through Karnataka IPM program"
+    },
+    {
+      "id": "bacterial_spot_tomato",
+      "name": "Bacterial Spot",
+      "crops": ["Tomato", "Chilli"],
+      "symptoms": ["small dark raised spots on leaves", "spots may have yellow halos", "fruit lesions causing scab", "leaf yellowing and dropping"],
+      "cause": "Xanthomonas campestris pv. vesicatoria (Bacterium)",
+      "severity": "medium",
+      "treatments": [
+        {"name": "Copper Hydroxide", "dosage": "3g per liter", "cost": "~Rs 300/kg", "frequency": "Spray at first symptom"},
+        {"name": "Streptocycline", "dosage": "500ppm", "cost": "~Rs 150/vial", "frequency": "Foliar spray every 10 days"},
+        {"name": "Bordeaux Mixture", "dosage": "1% solution", "cost": "~Rs 100/kg", "frequency": "Preventive spray"}
+      ],
+      "prevention": ["Use certified disease-free seeds", "Treat seed in hot water", "Rotate crops for 2 years", "Avoid overhead irrigation", "Use resistant varieties"],
+      "season": "Monsoon and post-monsoon (warm humid conditions)",
+      "government_scheme": "Vegetable seeds subsidized under National Horticulture Mission"
+    },
+    {
+      "id": "aphid_wheat",
+      "name": "Wheat Aphid (Sunflower Aphid)",
+      "crops": ["Wheat", "Barley"],
+      "symptoms": ["curled leaves", "honeydew and sooty mold", "stunted growth", "reduced tillering"],
+      "cause": "Diuraphis noxia (Sucking pest)",
+      "severity": "medium",
+      "treatments": [
+        {"name": "Imidacloprid", "dosage": "0.5ml per liter", "cost": "~Rs 350/liter", "frequency": "Foliar spray at infestation"},
+        {"name": "Thiamethoxam", "dosage": "0.3g per liter", "cost": "~Rs 400/kg", "frequency": "Seed treatment + foliar spray"},
+        {"name": "Neem Oil", "dosage": "5ml per liter", "cost": "~Rs 200/liter", "frequency": "Spray weekly"}
+      ],
+      "prevention": ["Use neem-coated seeds", "Encourage natural predators", "Avoid excess nitrogen", "Sow at recommended time", "Use resistant varieties"],
+      "season": "Rabi (January-February, dry cool weather)",
+      "government_scheme": "Wheat seeds subsidized under NFSM and state programs"
+    },
+    {
+      "id": "leaf_curl_papaya",
+      "name": "Papaya Leaf Curl Virus",
+      "crops": ["Papaya"],
+      "symptoms": ["upward curling of leaves", "thickened and leathery leaves", "stunted growth", "reduced fruit size and yield"],
+      "cause": "Papaya Leaf Curl Virus (Transmitted by whitefly Bemisia tabaci)",
+      "severity": "high",
+      "treatments": [
+        {"name": "Imidacloprid", "dosage": "0.5ml per liter", "cost": "~Rs 350/liter", "frequency": "Spray for whitefly control"},
+        {"name": "Thiamethoxam", "dosage": "0.3g per liter", "cost": "~Rs 400/kg", "frequency": "Foliar spray at vector appearance"},
+        {"name": "Neem Oil", "dosage": "5ml per liter", "cost": "~Rs 200/liter", "frequency": "Spray weekly for vector management"}
+      ],
+      "prevention": ["Use resistant varieties", "Remove infected plants early", "Install yellow sticky traps", "Use reflective mulch", "Intercrop with non-host plants"],
+      "season": "Year-round (peak during warm dry months)",
+      "government_scheme": "Tissue culture papaya plants subsidized under MIDH"
+    },
+    {
+      "id": "wilt_betelvine",
+      "name": "Foot Rot / Wilt",
+      "crops": ["Betelvine (Paan)"],
+      "symptoms": ["yellowing of leaves", "wilting of vine from base", "black lesions on stem", "plant death"],
+      "cause": "Phytophthora parasitica (Oomycete pathogen)",
+      "severity": "high",
+      "treatments": [
+        {"name": "Metalaxyl + Mancozeb", "dosage": "2.5g per liter soil drench", "cost": "~Rs 400/kg", "frequency": "Apply at planting and monsoon onset"},
+        {"name": "Fosetyl Aluminum", "dosage": "3g per liter", "cost": "~Rs 500/kg", "frequency": "Soil drench at disease onset"},
+        {"name": "Trichoderma viride", "dosage": "4g per liter", "cost": "~Rs 100/kg", "frequency": "Soil application at planting"}
+      ],
+      "prevention": ["Ensure proper drainage", "Use raised beds for planting", "Treat soil with Trichoderma", "Avoid waterlogging", "Maintain vine support structure"],
+      "season": "Monsoon (June-September, high rainfall areas)",
+      "government_scheme": "Betelvine cultivation supported under National Horticulture Mission in Karnataka"
+    },
+    {
+      "id": "rust_arhar",
+      "name": "Pigeonpea Rust",
+      "crops": ["Pigeonpea (Tur Dal)"],
+      "symptoms": ["small raised brown pustules on leaves", "powdery rust-colored spores", "premature leaf drop", "reduced pod filling"],
+      "cause": "Uredo phaseoli var. heterothallica (Rust fungus)",
+      "severity": "medium",
+      "treatments": [
+        {"name": "Mancozeb", "dosage": "2.5g per liter", "cost": "~Rs 200/kg", "frequency": "Spray at disease onset"},
+        {"name": "Sulfur 80% WP", "dosage": "3g per liter", "cost": "~Rs 80/kg", "frequency": "Dust or spray at early infection"},
+        {"name": "Propiconazole", "dosage": "1ml per liter", "cost": "~Rs 400/liter", "frequency": "Foliar spray at booting stage"}
+      ],
+      "prevention": ["Use resistant varieties (ICPH-2671)", "Remove crop debris after harvest", "Early sowing to avoid peak rust", "Balanced fertilization", "Ensure proper plant spacing"],
+      "season": "Kharif (September-November, post-monsoon humidity)",
+      "government_scheme": "Pulse seeds subsidized under National Food Security Mission"
+    },
+    {
+      "id": "charcoal_rot_soybean",
+      "name": "Charcoal Rot",
+      "crops": ["Soybean", "Sunflower"],
+      "symptoms": ["sudden wilting of plants", "silver-gray specks on stem base", "stem pith turning black", "plant death during pod filling"],
+      "cause": "Macrophomina phaseolina (Soil-borne fungus)",
+      "severity": "high",
+      "treatments": [
+        {"name": "Trichoderma viride", "dosage": "4g per kg seed", "cost": "~Rs 100/kg", "frequency": "Seed treatment before sowing"},
+        {"name": "Carbendazim", "dosage": "2g per liter soil drench", "cost": "~Rs 250/kg", "frequency": "Apply at sowing"},
+        {"name": "Pseudomonas fluorescens", "dosage": "5g per liter", "cost": "~Rs 80/kg", "frequency": "Soil application at sowing"}
+      ],
+      "prevention": ["Irrigate during dry spells at pod filling", "Use resistant varieties", "Add organic matter to soil", "Avoid water stress", "Deep plowing in summer"],
+      "season": "Kharif (August-October, hot dry spells)",
+      "government_scheme": "Soybean seeds subsidized through Oilseed Development Program"
+    },
+    {
+      "id": "angular_leaf_spot_bean",
+      "name": "Angular Leaf Spot",
+      "crops": ["French Bean", "Common Bean"],
+      "symptoms": ["angular brown spots on leaves", "spots limited by leaf veins", "leaf curling and dropping", "pod lesions with dark sunken areas"],
+      "cause": "Phaeoisariopsis griseola (Fungal pathogen)",
+      "severity": "medium",
+      "treatments": [
+        {"name": "Mancozeb", "dosage": "2.5g per liter", "cost": "~Rs 200/kg", "frequency": "Spray at disease onset"},
+        {"name": "Chlorothalonil", "dosage": "2ml per liter", "cost": "~Rs 350/liter", "frequency": "Spray every 10 days"},
+        {"name": "Carbendazim", "dosage": "1g per liter", "cost": "~Rs 250/kg", "frequency": "Foliar spray at early infection"}
+      ],
+      "prevention": ["Use resistant varieties", "Treat seed with fungicide", "Rotate crops for 2-3 years", "Remove infected debris", "Avoid overhead irrigation"],
+      "season": "Kharif and Rabi (depends on moisture)",
+      "government_scheme": "Bean seeds available through State Seed Corporation"
+    },
+    {
+      "id": "mealybug_grape",
+      "name": "Mealybug Infestation",
+      "crops": ["Grape", "Pomegranate", "Citrus"],
+      "symptoms": ["white cottony masses on stems", "sticky honeydew on leaves", "sooty mold growth", "stunted vine growth"],
+      "cause": "Planococcus citri and Maconellicoccus hirsutus (Sucking insect)",
+      "severity": "medium",
+      "treatments": [
+        {"name": "Imidacloprid", "dosage": "0.5ml per liter soil drench", "cost": "~Rs 350/liter", "frequency": "Apply at root zone"},
+        {"name": "Chlorpyriphos", "dosage": "2ml per liter", "cost": "~Rs 250/liter", "frequency": "Spray on affected parts"},
+        {"name": "Neem Oil", "dosage": "5ml per liter", "cost": "~Rs 200/liter", "frequency": "Spray on colonies"}
+      ],
+      "prevention": ["Introduce natural enemies (Cryptolaemus beetle)", "Use clean planting material", "Prune and destroy affected parts", "Control ant activity", "Monitor regularly during dry season"],
+      "season": "Year-round (worse during dry warm months)",
+      "government_scheme": "Bio-control agents available through State Bio-Control Lab"
+    },
+    {
+      "id": "anthracnose_coffee",
+      "name": "Coffee Berry Disease",
+      "crops": ["Coffee (Arabica)"],
+      "symptoms": ["dark sunken lesions on berries", "spots on leaves and twigs", "berry drop before maturity", "die-back of young shoots"],
+      "cause": "Colletotrichum kahawae (Fungal pathogen)",
+      "severity": "high",
+      "treatments": [
+        {"name": "Copper Oxychloride", "dosage": "3g per liter", "cost": "~Rs 250/kg", "frequency": "Spray at blossom and berry stage"},
+        {"name": "Mancozeb", "dosage": "2.5g per liter", "cost": "~Rs 200/kg", "frequency": "Spray every 14 days"},
+        {"name": "Bordeaux Mixture", "dosage": "1% solution", "cost": "~Rs 100/kg", "frequency": "Preventive spray before monsoon"}
+      ],
+      "prevention": ["Use resistant cultivars (S-795, Cauvery)", "Prune to improve air circulation", "Remove infected berries and twigs", "Shade management", "Balanced fertilization with potassium"],
+      "season": "Monsoon (June-September, wet weather)",
+      "government_scheme": "Coffee cultivation supported through Coffee Board of India"
+    },
+    {
+      "id": "red_spider_mite_cotton",
+      "name": "Red Spider Mite",
+      "crops": ["Cotton", "Okra", "Brinjal"],
+      "symptoms": ["tiny yellow speckles on upper leaf surface", "fine webbing on leaf undersides", "leaf bronzing and drying", "premature defoliation"],
+      "cause": "Tetranychus urticae (Mite pest)",
+      "severity": "medium",
+      "treatments": [
+        {"name": "Dicofol", "dosage": "2ml per liter", "cost": "~Rs 400/liter", "frequency": "Spray at mite appearance"},
+        {"name": "Sulfur 80% WP", "dosage": "3g per liter", "cost": "~Rs 80/kg", "frequency": "Spray in cool morning"},
+        {"name": "Neem Oil", "dosage": "5ml per liter", "cost": "~Rs 200/liter", "frequency": "Spray weekly for 3 weeks"}
+      ],
+      "prevention": ["Encourage predatory mites", "Avoid dust buildup on leaves", "Maintain humidity with sprinkler irrigation", "Remove weeds that harbor mites", "Spray water on leaf undersides"],
+      "season": "Dry season (February-May, hot and dusty conditions)",
+      "government_scheme": "Acricides subsidized through Karnataka Agriculture Department"
+    },
+    {
+      "id": "wilt_chickpea",
+      "name": "Fusarium Wilt",
+      "crops": ["Chickpea (Chana)"],
+      "symptoms": ["wilting of one or more branches", "brown vascular streaks in stem", "plant death during vegetative stage", "brown root rot"],
+      "cause": "Fusarium oxysporum f. sp. ciceris (Soil-borne fungus)",
+      "severity": "high",
+      "treatments": [
+        {"name": "Trichoderma viride", "dosage": "4g per kg seed", "cost": "~Rs 100/kg", "frequency": "Seed treatment before sowing"},
+        {"name": "Carbendazim", "dosage": "2g per liter", "cost": "~Rs 250/kg", "frequency": "Seed soak treatment"},
+        {"name": "Pseudomonas fluorescens", "dosage": "10g per kg seed", "cost": "~Rs 80/kg", "frequency": "Seed coating with bio-agent"}
+      ],
+      "prevention": ["Use resistant varieties (JG-74, KAK-12)", "Treat seed with bio-agents", "Deep summer plowing", "Crop rotation for 3-4 years", "Avoid waterlogged fields"],
+      "season": "Rabi (October-February)",
+      "government_scheme": "Pulse seeds subsidized under National Food Security Mission"
+    },
+    {
+      "id": "fruit_crack_pomegranate",
+      "name": "Fruit Crack",
+      "crops": ["Pomegranate"],
+      "symptoms": ["cracking of fruit rind", "exposed seeds and arils", "secondary fungal infection on cracks", "fruit drop and quality loss"],
+      "cause": "Physiological disorder caused by irregular irrigation, humidity changes, and calcium deficiency",
+      "severity": "medium",
+      "treatments": [
+        {"name": "Calcium Chloride", "dosage": "5g per liter foliar spray", "cost": "~Rs 50/kg", "frequency": "Spray at fruit development stage"},
+        {"name": "Boron + Calcium", "dosage": "As per product recommendation", "cost": "~Rs 200/kg", "frequency": "Spray at flowering and fruit set"},
+        {"name": "Carbendazim", "dosage": "1g per liter", "cost": "~Rs 250/kg", "frequency": "Spray to prevent secondary infection"}
+      ],
+      "prevention": ["Maintain uniform irrigation (drip preferred)", "Mulch around plants", "Apply balanced fertilization", "Ensure adequate calcium in soil", "Avoid overhead irrigation"],
+      "season": "Fruit development stage (March-June)",
+      "government_scheme": "Pomegranate orchard development under MIDH with 50-75% subsidy"
+    },
+    {
+      "id": "grey_mold_strawberry",
+      "name": "Grey Mold (Botrytis Fruit Rot)",
+      "crops": ["Strawberry"],
+      "symptoms": ["soft brown rot on fruits", "fuzzy gray fungal growth on fruit surface", "rapid fruit decay", "flower infection causing bud drop"],
+      "cause": "Botrytis cinerea (Fungal pathogen)",
+      "severity": "high",
+      "treatments": [
+        {"name": "Carbendazim", "dosage": "1g per liter", "cost": "~Rs 250/kg", "frequency": "Spray at flowering and fruiting"},
+        {"name": "Fludioxonil", "dosage": "0.5ml per liter", "cost": "~Rs 800/liter", "frequency": "Spray at petal fall"},
+        {"name": "Captan", "dosage": "2g per liter", "cost": "~Rs 300/kg", "frequency": "Spray every 7 days"}
+      ],
+      "prevention": ["Improve air circulation", "Remove infected fruits and flowers", "Avoid overhead irrigation", "Harvest at proper maturity", "Use raised beds with plastic mulch"],
+      "season": "Winter and spring (cool humid conditions)",
+      "government_scheme": "Strawberry cultivation supported under National Horticulture Mission"
+    },
+    {
+      "id": "stem_borer_sugarcane",
+      "name": "Early Shoot Borer",
+      "crops": ["Sugarcane"],
+      "symptoms": ["dead heart (central shoot drying)", "bore holes in stem with frass", "growth point damage", "tillers drying"],
+      "cause": "Chilo infuscatellus (Lepidoptera insect)",
+      "severity": "high",
+      "treatments": [
+        {"name": "Chlorantraniliprole", "dosage": "0.3ml per liter", "cost": "~Rs 1200/liter", "frequency": "Pour into shoot at 45 and 60 days"},
+        {"name": "Emamectin Benzoate", "dosage": "0.4g per liter", "cost": "~Rs 800/kg", "frequency": "Foliar spray at early larval stage"},
+        {"name": "Cartap Hydrochloride", "dosage": "2g per liter", "cost": "~Rs 300/kg", "frequency": "Root zone application"}
+      ],
+      "prevention": ["Use Trichogramma egg parasitoids (50,000/ha)", "Remove dead hearts and destroy", "Timely planting to avoid peak pest", "Balanced nitrogen application", "Use early maturing varieties"],
+      "season": "Kharif (August-November, post-monsoon growth stage)",
+      "government_scheme": "Trichogramma cards distributed free through Biological Control Lab"
+    },
+    {
+      "id": "bacterial_wilt_cucurbits",
+      "name": "Bacterial Wilt",
+      "crops": ["Cucumber", "Pumpkin", "Bottle Gourd", "Watermelon"],
+      "symptoms": ["rapid wilting of entire plant", "sticky bacterial ooze from cut stems (test with thread)", "vine collapse", "fruit rot"],
+      "cause": "Erwinia tracheiphila (Bacterium transmitted by striped cucumber beetle)",
+      "severity": "high",
+      "treatments": [
+        {"name": "Streptocycline", "dosage": "500ppm stem injection", "cost": "~Rs 150/vial", "frequency": "Inject into affected stems"},
+        {"name": "Copper Hydroxide", "dosage": "3g per liter", "cost": "~Rs 300/kg", "frequency": "Foliar spray to reduce vector"},
+        {"name": "Neem Oil", "dosage": "5ml per liter", "cost": "~Rs 200/liter", "frequency": "Spray to deter cucumber beetle"}
+      ],
+      "prevention": ["Control cucumber beetle population", "Remove and destroy infected plants", "Use resistant varieties if available", "Rotate with non-cucurbit crops", "Use netting to exclude beetles"],
+      "season": "Kharif (monsoon, warm humid conditions)",
+      "government_scheme": "Vegetable cultivation subsidized under NHM and state horticulture programs"
+    },
+    {
+      "id": "powdery_mildew_grape",
+      "name": "Powdery Mildew (Oidium)",
+      "crops": ["Grape"],
+      "symptoms": ["white powdery coating on leaves and shoots", "grayish-brown spots on berries", "berry cracking and russeting", "reduced sweetness of fruit"],
+      "cause": "Uncinula necator (Fungal pathogen)",
+      "severity": "high",
+      "treatments": [
+        {"name": "Sulfur Dust", "dosage": "25kg per hectare", "cost": "~Rs 60/kg", "frequency": "Dust during dry weather"},
+        {"name": "Tebuconazole", "dosage": "0.5ml per liter", "cost": "~Rs 500/liter", "frequency": "Spray at berry set"},
+        {"name": "Tridimefon", "dosage": "0.5g per liter", "cost": "~Rs 450/kg", "frequency": "Spray at pre-bloom and post-bloom"}
+      ],
+      "prevention": ["Prune for good air circulation", "Canopy management to reduce humidity", "Remove basal leaves early", "Use resistant rootstocks", "Apply sulfur preventively"],
+      "season": "Pre-monsoon to monsoon (March-September)",
+      "government_scheme": "Vineyard development supported under MIDH with 50% subsidy"
+    },
+    {
+      "id": "ternate_spot_sesame",
+      "name": "Cercospora Leaf Spot",
+      "crops": ["Sesame (Til)"],
+      "symptoms": ["small circular brown spots on leaves", "spots with yellow halos", "severe defoliation", "reduced seed yield and oil content"],
+      "cause": "Cercospora sesami (Fungal pathogen)",
+      "severity": "medium",
+      "treatments": [
+        {"name": "Mancozeb", "dosage": "2.5g per liter", "cost": "~Rs 200/kg", "frequency": "Spray at disease onset"},
+        {"name": "Carbendazim", "dosage": "1g per liter", "cost": "~Rs 250/kg", "frequency": "Foliar spray at early infection"},
+        {"name": "Copper Oxychloride", "dosage": "3g per liter", "cost": "~Rs 250/kg", "frequency": "Preventive spray during monsoon"}
+      ],
+      "prevention": ["Use resistant varieties", "Crop rotation for 2 years", "Remove crop debris after harvest", "Balanced fertilization", "Ensure proper plant spacing"],
+      "season": "Kharif (August-October, post-monsoon)",
+      "government_scheme": "Oilseed development programs through NMOOP"
+    },
+    {
+      "id": "root_rot_ginger",
+      "name": "Root and Rhizome Rot",
+      "crops": ["Ginger", "Turmeric"],
+      "symptoms": ["rotting of rhizomes", "yellowing and wilting of leaves", "soft foul-smelling rhizome tissue", "plant pulling out easily from soil"],
+      "cause": "Pythium aphanidermatum (Oomycete pathogen)",
+      "severity": "high",
+      "treatments": [
+        {"name": "Metalaxyl + Mancozeb", "dosage": "2.5g per liter soil drench", "cost": "~Rs 400/kg", "frequency": "Apply at planting and during monsoon"},
+        {"name": "Trichoderma viride", "dosage": "4g per liter", "cost": "~Rs 100/kg", "frequency": "Soil application at planting"},
+        {"name": "Fosetyl Aluminum", "dosage": "3g per liter", "cost": "~Rs 500/kg", "frequency": "Drench at disease onset"}
+      ],
+      "prevention": ["Use well-drained raised beds", "Treat rhizomes with Trichoderma before planting", "Improve field drainage", "Avoid waterlogging", "Mulch to maintain even soil moisture"],
+      "season": "Monsoon (July-September, waterlogged conditions)",
+      "government_scheme": "Spice cultivation supported under NHM with 50% subsidy"
+    },
+    {
+      "id": "leaf_curl_peach",
+      "name": "Peach Leaf Curl",
+      "crops": ["Peach", "Nectarine"],
+      "symptoms": ["thickened and curled leaves", "reddish-purple discoloration on leaves", "leaf surface becoming puckered", "premature leaf drop"],
+      "cause": "Taphrina deformans (Fungal pathogen)",
+      "severity": "medium",
+      "treatments": [
+        {"name": "Bordeaux Mixture", "dosage": "1% solution", "cost": "~Rs 100/kg", "frequency": "Dormant spray before bud break"},
+        {"name": "Copper Hydroxide", "dosage": "3g per liter", "cost": "~Rs 300/kg", "frequency": "Spray during dormant season"},
+        {"name": "Chlorothalonil", "dosage": "2ml per liter", "cost": "~Rs 350/liter", "frequency": "Spray at leaf fall and pre-bloom"}
+      ],
+      "prevention": ["Apply dormant spray before bud break", "Remove and destroy fallen leaves", "Ensure good air circulation", "Choose resistant varieties", "Avoid overhead irrigation"],
+      "season": "Winter-dormant season (December-February spray, symptoms in March)",
+      "government_scheme": "Stone fruit cultivation supported under MIDH"
+    },
+    {
+      "id": "webworm_castor",
+      "name": "Castor Semi-Looper / Webworm",
+      "crops": ["Castor"],
+      "symptoms": ["holes chewed in leaves", "webbing and mass of larvae on plants", "defoliation in severe infestation", "damage to developing capsules"],
+      "cause": "Andraca bipunctata and Achoea janata (Lepidoptera insects)",
+      "severity": "medium",
+      "treatments": [
+        {"name": "Emamectin Benzoate", "dosage": "0.4g per liter", "cost": "~Rs 800/kg", "frequency": "Spray at larval appearance"},
+        {"name": "Chlorantraniliprole", "dosage": "0.3ml per liter", "cost": "~Rs 1200/liter", "frequency": "Spray at early larval stage"},
+        {"name": "Bacillus thuringiensis (Bt)", "dosage": "2g per liter", "cost": "~Rs 150/kg", "frequency": "Spray when larvae are small"}
+      ],
+      "prevention": ["Install light traps", "Collect and destroy egg masses", "Encourage natural predators", "Intercrop with non-host crops", "Remove weedy borders"],
+      "season": "Kharif (July-October, monsoon growth stage)",
+      "government_scheme": "Castor development programs through NMOOP"
+    }
+  ]
+}

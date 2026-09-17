@@ -1,5 +1,4 @@
-#  Project Kisan  (Please find Prototype link attached in description)
-
+#  Project Kisan
 ##  Overview  
 Project Kisan is an AI-powered platform designed to support farmers with crop price insights, government schemes, and crop disease diagnosis.  
 It combines **AI, voice interaction, and real-time data** to make agricultural knowledge accessible in regional languages.  
