@@ -1,5 +1,5 @@
 // utils/mockVoiceAI.js - Temporary mock implementation for testing
-import { generativeModel } from './vertex.js';
+import { ai } from './vertex.js';
 
 /**
  * Mock speech-to-text for testing without Google Cloud Speech API
@@ -107,8 +107,11 @@ async function processMockVoiceQuery(audioBuffer, inputLanguage = 'hi-IN', conte
     console.log('🤖 Getting AI response...');
     
     try {
-      const result = await generativeModel.generateContent(enhancedPrompt);
-      const aiResponse = result.response.candidates[0].content.parts[0].text;
+      const result = await ai.models.generateContent({
+        model: 'gemini-3.6-flash',
+        contents: enhancedPrompt
+      });
+      const aiResponse = result.text;
       console.log(`💬 AI Response: ${aiResponse}`);
       
       // Step 3: Mock text-to-speech

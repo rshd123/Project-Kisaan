@@ -1,6 +1,8 @@
 # Dependencies
 node_modules/
 
+/pics 
+
 # Environment variables
 .env
 .env.local

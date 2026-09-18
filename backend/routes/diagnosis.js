@@ -1,7 +1,7 @@
 import express from 'express';
 import multer from 'multer';
 import fs from 'fs';
-import { generativeModel, supabase } from '../utils/vertex.js';
+import { ai, supabase } from '../utils/vertex.js';
 import { lookupDisease } from '../utils/diseaseLookup.js';
 
 const router = express.Router();
@@ -43,24 +43,25 @@ router.post('/', upload.single('image'), async (req, res) => {
     const fileData = fs.readFileSync(imagePath);
     console.log('Image file read successfully, size:', fileData.length);
 
-    // Convert image to base64 for Google AI SDK
     const imageBase64 = fileData.toString('base64');
 
     console.log('Calling Google AI with structured prompt...');
-    const result = await generativeModel.generateContent([
-      STRUCTURED_PROMPT,
-      {
-        inlineData: {
-          mimeType: 'image/jpeg',
-          data: imageBase64
+    const result = await ai.models.generateContent({
+      model: 'gemini-3.6-flash',
+      contents: [
+        {
+          role: 'user',
+          parts: [
+            { text: STRUCTURED_PROMPT },
+            { inlineData: { mimeType: 'image/jpeg', data: imageBase64 } }
+          ]
         }
-      }
-    ]);
+      ]
+    });
 
     console.log('Google AI response received');
-    const responseText = result.response.text();
+    const responseText = result.text;
 
-    // Parse the structured JSON response
     let diagnosis;
     try {
       diagnosis = JSON.parse(responseText);
@@ -76,7 +77,6 @@ router.post('/', upload.single('image'), async (req, res) => {
 
     console.log('AI diagnosis:', diagnosis);
 
-    // Look up disease in local knowledge base
     let kbData = lookupDisease(diagnosis.disease_name);
     if (kbData) {
       console.log('Knowledge base match found:', kbData.name);
@@ -84,7 +84,6 @@ router.post('/', upload.single('image'), async (req, res) => {
       console.log('No knowledge base match for:', diagnosis.disease_name);
     }
 
-    // Merge AI response with knowledge base data
     const mergedDiagnosis = {
       disease_name: diagnosis.disease_name || 'Unknown',
       crop_type: diagnosis.crop_type || 'Unknown',
